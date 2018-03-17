@@ -1,7 +1,29 @@
-{% for task in object_list %}
+{% extends 'index.html' %}
 
-    {{task.name}}<br>
+{% block tasks %}
 
-{% endfor %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Tasks</h1>
+      </div>
+
+    {% for task in object_list %}
+
+      <div class="row">
+        <div class="col-2">{{task.wbs_code}}</div>
+        <div class="col-2">{{task.name}}</div>
+        <div class="col-2">{{ task.start_date }}</div>
+        <div class="col-2">{{ task.end_date }}</div>
+        <div class="col-2">{{ task.responsible }}</div>
+      </div>
+
+
+    {% endfor %}
+
+
+
+
+
+{% endblock %}
 
 

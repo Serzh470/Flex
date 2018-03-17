@@ -23,7 +23,7 @@ class Task(models.Model):
     end_date = models.DateField()
     responsible = models.CharField(max_length=255)
     status = models.CharField(max_length=64)
-    project = models.ForeignKey(Project, on_delete='PROTECT', null=True)
+    project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)

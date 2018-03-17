@@ -1,4 +1,4 @@
 env
 .idea
-__pycashe__
+__pycache__
 db.sqlite3
