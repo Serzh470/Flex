@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block projects %}
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Projects</h1>
+      </div>
+
+    {% for project in object_list %}
+
+      <div class="row">
+        <div class="col-2">{{project.name}}</div>
+        <div class="col-2">{{project.start_date }}</div>
+        <div class="col-2">{{project.end_date }}</div>
+        <div class="col-2">{{project.project_manager }}</div>
+        <div class="col-2">{{project.status }}</div>
+      </div>
+
+
+    {% endfor %}
+
+{% endblock %}
