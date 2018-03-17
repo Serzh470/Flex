@@ -8,24 +8,20 @@ from django.views.generic.base import TemplateView
 # Create your views here.
 
 
-class Home(TemplateView):
+class Home(ListView):
     """
-    Displaying home page
+    Displaying active projects on home page
     """
     template_name = 'home.html'
     model = Project
 
     def get_queryset(self):
-        return Project.objects.all()
-
-
-# def home(request):
-#     return render(request, 'index.html', {'project': Project.name})
+        return Project.objects.filter(status='Ongoing')
 
 
 class MyTaskList(ListView):
     """
-    Displaying task list
+    Displaying task list on task list page
     """
     template_name = 'task_list.html'
     model = Task
