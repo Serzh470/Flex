@@ -1,0 +1,4 @@
+env
+.idea
+__pycashe__
+db.sqlite3
