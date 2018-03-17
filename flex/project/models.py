@@ -27,19 +27,3 @@ class Task(models.Model):
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)
-
-
-class User(models.Model):
-    name = models.CharField(max_length = 50)
-    surname = models.CharField(max_length = 50)
-    job = models.CharField(max_length=250)
-    phone = models.CharField(max_length=50)
-    email = models.CharField(max_length=100)
-    project_role = models.CharField(max_length=100)
-    occupation = models.CharField(max_length=250)
-    other = models.CharField(max_length=250)
-
-    def __str__(self):
-        return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
-
-
