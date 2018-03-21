@@ -3,58 +3,54 @@ from django import forms
 from .models import Project, Task
 from django.shortcuts import resolve_url
 
+STATUS = (
+    (1, u'Не начато'),
+    (2, u'В работе'),
+    (3, u'Отстает'),
+    (4, u'Выполнено'),
+    (5, u'Приостановлено')
+)
 
-# class TaskCreate(CreateView):
-#     """
-#     Create new task object
-#     """
-#     model = Task
-#     template_name = 'create_task.html'
-#     # fields = '__all__'
-#     fields = [
-#         'wbs_code',
-#         'name',
-#         'description',
-#         'start_date',
-#         'duration',
-#         'duration',
-#         'end_date',
-#         'predecessor',
-#         'responsible',
-#         'status',
-#         'project',
-#     ]
-#
-#     def get_success_url(self):
-#         return resolve_url('/mytasks/', pk=self.object.pk)
 
 class TaskForm(forms.ModelForm):
     """
     Create new task object
     """
-    wbs_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'WBS'}))
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}))
-    description = forms.Textarea()
-    start_date = forms.DateField(widget=forms.DateField())
-    duration = forms.DurationField(widget=forms.DurationField)
-    end_date = forms.DateField(widget=forms.DateField())
-    predecessor = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Previous task'}))
-    responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Responsible'}))
-    status = forms.CharField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Status'}))
-    project = forms.CharField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Project'}))
 
+    wbs_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'WBS код'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
+    description = forms.CharField(required=False,widget=forms.Textarea(
+        attrs={'class': 'form-control', 'rows': 4, 'cols': 20, 'placeholder': 'Описание'}))
+
+    start_date = forms.DateField(
+        widget=forms.DateInput(format=('%d.%m.%Y'),
+        attrs={'class': 'form-control datepicker', 'placeholder': 'Старт: 01.12.1900'}))
+
+    duration = forms.DurationField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность: '}))
+
+    end_date = forms.DateField(
+        widget=forms.DateInput(format=('%d.%m.%Y'), attrs={'class': 'form-control', 'placeholder': 'Финиш: 01.12.1900'}))
+
+    predecessor = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача:'}))
+
+    responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}))
+
+    status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
+                             choices=STATUS)
+
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.all().values_list('name', flat=True), widget=forms.Select(attrs={
+            'class': 'form-control', 'placeholder': 'Входит в проект'}))
 
     class Meta:
-
         model = Task
-        # template_name = 'create_task.html'
-        # fields = '__all__'
         fields = [
             'wbs_code',
             'name',
             'description',
             'start_date',
-            'duration',
             'duration',
             'end_date',
             'predecessor',

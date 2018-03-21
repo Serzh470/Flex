@@ -5,7 +5,8 @@ STATUS = (
     (1, u'Не начато'),
     (2, u'В работе'),
     (3, u'Отстает'),
-    (4, u'Выполнено')
+    (4, u'Выполнено'),
+    (5, u'Приостановлено')
 )
 
 # Create your models here.
@@ -21,7 +22,11 @@ class Project(models.Model):
     status = models.SmallIntegerField(choices=STATUS)
 
     def __str__(self):
-        return 'Project: {} | Project Manager: {} | Status: {}'.format(self.name, self.project_manager, self.status)
+        # return 'Project: {} | Project Manager: {} | Status: {}'.format(self.name, self.project_manager, self.status)
+        return self.name
+
+    def __unicode__(self):
+        return self.name
 
 
 class Task(models.Model):

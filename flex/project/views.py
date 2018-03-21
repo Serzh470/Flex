@@ -17,8 +17,8 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context.update({
-            'tasks': Task.objects.filter(status=1),
-            'projects': Project.objects.filter(status=1),
+            'tasks': Task.objects.filter(status=2),
+            'projects': Project.objects.filter(status=2),
         })
         return context
 

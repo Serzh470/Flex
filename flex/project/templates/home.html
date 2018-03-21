@@ -2,34 +2,65 @@
 
 {% block home %}
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 ">
+    <main role="main" class="col-md-10 ml-sm-auto col-lg-10 pt-3 px-4 ">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Active Projects</h1>
+        <h1 class="h2">Активные проекты</h1>
       </div>
 
-    {% for project in projects %}
-          <div class="row">
-            <div class="col-2">{{project.name}}</div>
-            <div class="col-2">{{project.start_date}}</div>
-            <div class="col-2">{{project.end_date}}</div>
-            <div class="col-2">{{project.project_manager}}</div>
-            <div class="col-2">{{project.status}}</div>
-          </div>
-    {%  endfor %}
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Проект</th>
+                <th scope="col">Старт</th>
+                <th scope="col">Финиш</th>
+                <th scope="col">Руководитель</th>
+                <th scope="col">Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.start_date }}</td>
+                    <td>{{ project.end_date }}</td>
+                    <td>{{ project.project_manager }}</td>
+                    <td>{{ project.status }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
         <br style="margin-bottom:3cm;"> </br>
+
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Active Tasks</h1>
+        <h1 class="h2">Активные задачи</h1>
       </div>
 
-    {% for task in tasks %}
-      <div class="row">
-        <div class="col-2">{{task.name}}</div>
-        <div class="col-2">{{task.start_date}}</div>
-        <div class="col-2">{{task.end_date}}</div>
-        <div class="col-2">{{task.responsible}}</div>
-        <div class="col-2">{{task.status}}</div>
-      </div>
-    {%  endfor %}
-
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">WBS Код</th>
+                <th scope="col">Задача</th>
+                <th scope="col">Старт</th>
+                <th scope="col">Финиш</th>
+                <th scope="col">Исполнитель</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Проект</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <th scope="row">{{ task.wbs_code }}</th>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                    <td>{{ task.responsible }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.project }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
