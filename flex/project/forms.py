@@ -4,11 +4,11 @@ from .models import Project, Task
 from django.shortcuts import resolve_url
 
 STATUS = (
-    (1, u'Не начато'),
-    (2, u'В работе'),
-    (3, u'Отстает'),
-    (4, u'Выполнено'),
-    (5, u'Приостановлено')
+    (1, 'Не начато'),
+    (2, 'В работе'),
+    (3, 'Отстает'),
+    (4, 'Выполнено'),
+    (5, 'Приостановлено')
 )
 
 
@@ -16,33 +16,25 @@ class TaskForm(forms.ModelForm):
     """
     Create new task object
     """
-
     wbs_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'WBS код'}))
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
-    description = forms.CharField(required=False,widget=forms.Textarea(
-        attrs={'class': 'form-control', 'rows': 4, 'cols': 20, 'placeholder': 'Описание'}))
-
+    description = forms.CharField(required=False, widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Описание'}))
     start_date = forms.DateField(
-        widget=forms.DateInput(format=('%d.%m.%Y'),
-        attrs={'class': 'form-control datepicker', 'placeholder': 'Старт: 01.12.1900'}))
-
+        widget=forms.DateInput(attrs={'class': 'form-control datepicker', 'placeholder': 'Старт: 01.12.1900'}))
     duration = forms.DurationField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность: '}))
-
     end_date = forms.DateField(
-        widget=forms.DateInput(format=('%d.%m.%Y'), attrs={'class': 'form-control', 'placeholder': 'Финиш: 01.12.1900'}))
-
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Финиш: 01.12.1900'}))
     predecessor = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача:'}))
-
     responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}))
-
     status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
                              choices=STATUS)
-
     project = forms.ModelChoiceField(
-        queryset=Project.objects.all().values_list('name', flat=True), widget=forms.Select(attrs={
+        queryset=Project.objects.all(), widget=forms.Select(attrs={
             'class': 'form-control', 'placeholder': 'Входит в проект'}))
+
 
     class Meta:
         model = Task
@@ -63,3 +55,17 @@ class TaskForm(forms.ModelForm):
 class TaskCreate(CreateView):
     form_class = TaskForm
     template_name = 'create_task.html'
+
+    def get_success_url(self):
+        return "/mytasks/"
+
+
+class TaskUpdate(UpdateView):
+    form_class = TaskForm
+    template_name = 'create_task.html'
+    # pk_url_kwarg = 'task_id'
+    success_url = '/mytasks/'
+    queryset = Task.objects.all()
+
+
+

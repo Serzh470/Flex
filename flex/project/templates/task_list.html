@@ -27,8 +27,13 @@
                     <td>{{ task.start_date }}</td>
                     <td>{{ task.end_date }}</td>
                     <td>{{ task.responsible }}</td>
-                    <td>{{ task.status }}</td>
+                    <td>{{ task.get_status_display }}</td>
                     <td>{{ task.project }}</td>
+                    <td>
+                        <a href="/updtask/{{ task.id }}/">
+                            <button type="button" class="btn btn-primary">Редактировать</button>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

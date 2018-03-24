@@ -24,7 +24,7 @@
                     <td>{{ project.start_date }}</td>
                     <td>{{ project.end_date }}</td>
                     <td>{{ project.project_manager }}</td>
-                    <td>{{ project.status }}</td>
+                    <td>{{ project.get_status_display }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -56,7 +56,7 @@
                     <td>{{ task.start_date }}</td>
                     <td>{{ task.end_date }}</td>
                     <td>{{ task.responsible }}</td>
-                    <td>{{ task.status }}</td>
+                    <td>{{ task.get_status_display }}</td>
                     <td>{{ task.project }}</td>
                 </tr>
             {% endfor %}
