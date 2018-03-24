@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+{% block create_task %}
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Создать задачу</h1>
+      </div>
+        <form action="" method="post">
+            {% csrf_token %}
+                {% for field in form %}
+        {#                    <label for="formGroupExampleInput"> {{ field.label_tag }} </label>#}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Сохранить">
+        </form>
+
+{% endblock %}

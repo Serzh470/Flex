@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block projects %}
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Проекты</h1>
+      </div>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Проект</th>
+                <th scope="col">Старт</th>
+                <th scope="col">Финиш</th>
+                <th scope="col">Руководитель</th>
+                <th scope="col">Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in object_list %}
+                <tr>
+                    <td>{{project.name}}</td>
+                    <td>{{project.start_date }}</td>
+                    <td>{{project.end_date }}</td>
+                    <td>{{project.project_manager }}</td>
+                    <td>{{project.get_status_display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
