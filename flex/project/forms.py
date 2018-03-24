@@ -1,15 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task
-from django.shortcuts import resolve_url
-
-STATUS = (
-    (1, 'Не начато'),
-    (2, 'В работе'),
-    (3, 'Отстает'),
-    (4, 'Выполнено'),
-    (5, 'Приостановлено')
-)
+from .models import Project, Task, STATUS
 
 
 class TaskForm(forms.ModelForm):
@@ -55,15 +46,12 @@ class TaskForm(forms.ModelForm):
 class TaskCreate(CreateView):
     form_class = TaskForm
     template_name = 'create_task.html'
-
-    def get_success_url(self):
-        return "/mytasks/"
+    success_url = '/mytasks/'
 
 
 class TaskUpdate(UpdateView):
     form_class = TaskForm
     template_name = 'create_task.html'
-    # pk_url_kwarg = 'task_id'
     success_url = '/mytasks/'
     queryset = Task.objects.all()
 
