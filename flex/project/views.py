@@ -8,3 +8,6 @@ from django.shortcuts import HttpResponse
 def home(request):
 
     return render(request, 'index.html', {'project': Project.name})
+
+def hr(request):
+    return render(request, 'hr.html', {'project':Project.name})
