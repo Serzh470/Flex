@@ -83,17 +83,20 @@
           </div>
         </nav>
 
-            {% block home %} {% endblock %}
-            {% block projects %} {% endblock %}
-            {% block tasks %} {% endblock %}
-            {% block create_task %} {% endblock %}
+
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+            {% block home %}{% endblock %}
+            {% block projects %}{% endblock %}
+            {% block tasks %}{% endblock %}
+            {% block create_task %}{% endblock %}
+            {% block delete_task %}{% endblock %}
+
+        </main>
 
       </div>
     </div>
-
-
-
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
