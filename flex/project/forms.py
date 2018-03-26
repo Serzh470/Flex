@@ -23,7 +23,7 @@ class TaskForm(forms.ModelForm):
     status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
                              choices=STATUS)
     project = forms.ModelChoiceField(
-        queryset=Project.objects.all(), widget=forms.Select(attrs={
+        queryset=Project.objects.all(), required=False, widget=forms.Select(attrs={
             'class': 'form-control', 'placeholder': 'Входит в проект'}))
 
 
@@ -56,4 +56,8 @@ class TaskUpdate(UpdateView):
     queryset = Task.objects.all()
 
 
+class TaskDelete(DeleteView):
+    model = Task
+    template_name = 'delete_task.html'
+    success_url = '/mytasks/'
 
