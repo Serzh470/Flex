@@ -19,7 +19,9 @@
         <tbody>
             {% for project in object_list %}
                 <tr>
-                    <td>{{project.name}}</td>
+                    <td>
+                        <a href="/project_dashboard/{{ project.id }}/" class="card-link">{{project.name}}</a>
+                    </td>
                     <td>{{project.start_date }}</td>
                     <td>{{project.end_date }}</td>
                     <td>{{project.project_manager }}</td>
@@ -30,5 +32,3 @@
     </table>
 
 {% endblock %}
-
-
