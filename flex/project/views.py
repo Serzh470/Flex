@@ -11,7 +11,11 @@ class Home(TemplateView):
     """
     template_name = 'home.html'
 
-    def get_context_data(self, **kwargs):
+
+def hr(request):
+    return render(request, 'hr.html', {'project':Project.name})
+
+def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
         context.update({
             'tasks': Task.objects.filter(status=2),
