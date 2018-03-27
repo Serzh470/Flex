@@ -42,10 +42,18 @@ class MyProjectList(ListView):
         return Project.objects.all()
 
 
-class ProjectDashboard(DetailView):
+class ProjectDashboard(TemplateView):
     """
     Display project dashboard
     """
     template_name = 'project_dashboard.html'
     model = Project
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(ProjectDashboard, self).get_context_data(**kwargs)
+        context.update({
+            'tasks': Task.objects.filter(project__id=pk),
+            'project': Project.objects.filter(pk=pk)
+        })
+        return context
 

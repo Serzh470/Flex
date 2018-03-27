@@ -26,7 +26,6 @@ class TaskForm(forms.ModelForm):
         queryset=Project.objects.all(), required=False, widget=forms.Select(attrs={
             'class': 'form-control', 'placeholder': 'Входит в проект'}))
 
-
     class Meta:
         model = Task
         fields = [
@@ -60,4 +59,3 @@ class TaskDelete(DeleteView):
     model = Task
     template_name = 'delete_task.html'
     success_url = '/mytasks/'
-
