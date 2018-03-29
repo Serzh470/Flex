@@ -55,6 +55,7 @@ class User(models.Model):
     project_role = models.CharField(max_length=100)
     occupation = models.CharField(max_length=250)
     other = models.CharField(max_length=250)
+    project = models.ForeignKey(Project, on_delete='PROTECT', null = True, blank = True)
 
     def __str__(self):
         return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
