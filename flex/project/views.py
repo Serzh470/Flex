@@ -1,9 +1,9 @@
 from .models import Project, Task
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 
 # Create your views here.
-
 
 class Home(TemplateView):
     """
@@ -44,3 +44,19 @@ class MyProjectList(ListView):
 
     def get_queryset(self):
         return Project.objects.all()
+
+      
+class ProjectDashboard(TemplateView):
+    """
+    Display project dashboard
+    """
+    template_name = 'project_dashboard.html'
+    model = Project
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(ProjectDashboard, self).get_context_data(**kwargs)
+        context.update({
+            'tasks': Task.objects.filter(project__id=pk),
+            'project': Project.objects.filter(pk=pk)
+        })
+        return context

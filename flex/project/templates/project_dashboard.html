@@ -1,0 +1,60 @@
+
+{% extends 'index.html' %}
+
+{% block project_dashboard %}
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h1">{{ project.first.name }}</h1>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="#" class="card-link">Устав проекта</a>
+            <a href="#" class="card-link">Объем работ</a>
+            <a href="#" class="card-link">Команда проекта</a>
+            <a href="#" class="card-link">Сетевая диаграмма</a>
+            <a href="#" class="card-link">Диаграмма Ганта</a>
+            <a href="#" class="card-link">Оценка времени</a>
+            <a href="#" class="card-link">Бюджет</a>
+            <a href="#" class="card-link">Оценка качества, стандартов и процессов</a>
+            <a href="#" class="card-link">RASI матрица</a>
+            <a href="#" class="card-link">Риск-анализ</a>
+            <a href="#" class="card-link">Оценка закупок</a>
+            <a href="#" class="card-link">План коммуникаций</a>
+            <a href="#" class="card-link">Контроль изменений</a>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h2 class="h2">Задачи</h2>
+    </div>
+
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">WBS Код</th>
+                <th scope="col">Задача</th>
+                <th scope="col">Старт</th>
+                <th scope="col">Финиш</th>
+                <th scope="col">Исполнитель</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Проект</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <th scope="row">{{ task.wbs_code }}</th>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                    <td>{{ task.responsible }}</td>
+                    <td>{{ task.get_status_display }}</td>
+                    <td>{{ task.project }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
