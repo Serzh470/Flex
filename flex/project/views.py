@@ -11,17 +11,13 @@ class Home(TemplateView):
     """
     template_name = 'home.html'
 
-
-def hr(request):
-    return render(request, 'hr.html', {'project':Project.name})
-
-def get_context_data(self, **kwargs):
-        context = super(Home, self).get_context_data(**kwargs)
-        context.update({
-            'tasks': Task.objects.filter(status=2),
-            'projects': Project.objects.filter(status=2),
-        })
-        return context
+    def get_context_data(self, **kwargs):
+            context = super(Home, self).get_context_data(**kwargs)
+            context.update({
+                'tasks': Task.objects.filter(status=2),
+                'projects': Project.objects.filter(status=2),
+            })
+            return context
 
 
 class MyTaskList(ListView):
@@ -56,7 +52,11 @@ class ProjectDashboard(TemplateView):
     def get_context_data(self, pk, **kwargs):
         context = super(ProjectDashboard, self).get_context_data(**kwargs)
         context.update({
-            'tasks': Task.objects.filter(project__id=pk),
+            'tasks': Task.objects.filter(project_id=pk),
             'project': Project.objects.filter(pk=pk)
         })
         return context
+
+
+def hr(request):
+    return render(request, 'hr.html', {'project': Project.name})
