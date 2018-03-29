@@ -7,3 +7,6 @@ class ProjectConfig(AppConfig):
 
 class TaskConfig(AppConfig):
     name = 'task'
+
+class UserConfig(AppConfig):
+    name = 'user'
