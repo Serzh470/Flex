@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from requests import request
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -54,16 +55,18 @@ class HR(ListView):
 
 
 def hr(request):
-    # if request.method == "POST":
-    #     form = UserForm(request.POST)
-    #     if form.is_valid():
-    #         user = form.save(commit=False)
-    #         user.save()
-    #         return redirect('hr_all')
-    #     else:
-    #         form = UserForm()
-    projects = Project.objects.all()
-    return render(request, 'hr.html', {'projects':projects})
+    form=UserForm()
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect('hr_all')
+        else:
+            form = UserForm()
+    # projects = Project.objects.all()
+    return render(request, 'hr.html', {'form':form})
+    # return render(request, 'hr.html', {'projects':projects})
 
 def hr_all(request):
     users = User.objects.all()
