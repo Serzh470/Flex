@@ -77,6 +77,7 @@ class UserForm(forms.ModelForm):
             'project_role',
             'occupation',
             'other',
+            'project'
         ]
 
 class UserCreate(CreateView):

@@ -62,8 +62,8 @@ def hr(request):
     #         return redirect('hr_all')
     #     else:
     #         form = UserForm()
-
-    return render(request, 'hr.html', {'project':Project.name})
+    projects = Project.objects.all()
+    return render(request, 'hr.html', {'projects':projects})
 
 def hr_all(request):
     users = User.objects.all()
