@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task, STATUS
+from .models import Project, Task, STATUS, TASK_TYPE
 
 
 class TaskForm(forms.ModelForm):
@@ -8,6 +8,8 @@ class TaskForm(forms.ModelForm):
     Create new task object
     """
     wbs_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'WBS код'}))
+    type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Задача или Веха'}),
+                             choices=TASK_TYPE)
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
     description = forms.CharField(required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Описание'}))
@@ -30,6 +32,7 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = [
             'wbs_code',
+            'type',
             'name',
             'description',
             'start_date',
