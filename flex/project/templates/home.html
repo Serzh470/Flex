@@ -39,6 +39,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">WBS Код</th>
+                <th scope="col">Тип</th>
                 <th scope="col">Задача</th>
                 <th scope="col">Старт</th>
                 <th scope="col">Финиш</th>
@@ -51,6 +52,7 @@
             {% for task in tasks %}
                 <tr>
                     <th scope="row">{{ task.wbs_code }}</th>
+                    <td>{{ task.get_type_display }}</td>
                     <td>{{ task.name }}</td>
                     <td>{{ task.start_date }}</td>
                     <td>{{ task.end_date }}</td>
