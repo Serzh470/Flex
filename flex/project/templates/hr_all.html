@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+
+{% block hr_all %}
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2">Участники</h1>
+        <a href="/hr/">
+            <button type="button" class="btn btn-primary">Добавить участника</button>
+        </a>
+        </div>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Должность</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Почта</th>
+                <th scope="col">Роль в проекте</th>
+                <th scope="col">Занятость</th>
+                <th scope="col">Проект</th>
+                <th scope="col">Другое</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.name}}</td>
+                    <td>{{ user.surname }}</td>
+                    <td>{{user.job}}</td>
+                    <td>{{user.phone }}</td>
+                    <td>{{user.email }}</td>
+                    <td>{{user.project_role }}</td>
+                    <td>{{ user.occupation }}</td>
+                    <td>{{ user.project }}</td>
+                    <td>{{ user.other }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

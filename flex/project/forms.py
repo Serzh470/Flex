@@ -1,6 +1,7 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task, STATUS, TASK_TYPE
+from .models import Project, Task, STATUS, User, TASK_TYPE
+
 
 
 class TaskForm(forms.ModelForm):
@@ -45,6 +46,7 @@ class TaskForm(forms.ModelForm):
         ]
 
 
+
 class TaskCreate(CreateView):
     form_class = TaskForm
     template_name = 'create_task.html'
@@ -62,3 +64,28 @@ class TaskDelete(DeleteView):
     model = Task
     template_name = 'delete_task.html'
     success_url = '/mytasks/'
+
+
+
+class UserForm(forms.ModelForm):
+
+
+    class Meta:
+        model = User
+        fields = [
+            'name',
+            'surname',
+            'job',
+            'phone',
+            'email',
+            'project_role',
+            'occupation',
+            'other',
+            'project'
+        ]
+
+class UserCreate(CreateView):
+    form_class = UserForm
+    template_name = 'hr.html'
+    success_url = '/'
+

@@ -1,9 +1,15 @@
 from django.conf.urls import url
-from .views import Home, MyProjectList, MyTaskList, ProjectDashboard, hr
+
+from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard
+
 from .forms import TaskCreate, TaskUpdate, TaskDelete
 
+
+
 urlpatterns = [
-    url(r'^hr/$', hr, name='hr'),
+
+    url(r'^hr/$', hr, name = 'hr'),
+    url(r'^hr_all/$', hr_all, name='hr_all'),
     url(r'^$', Home.as_view(), name='home'),
     url(r'^mytasks/$', MyTaskList.as_view(), name='tasks'),
     url(r'^myprojects/$', MyProjectList.as_view(), name='projects'),

@@ -9,7 +9,14 @@ STATUS = (
     (5, 'Приостановлено')
 )
 
+
+ROLE = ((1,'Участник'),
+        (2, 'Менеджер'),
+        (3, 'Стейкхолдер'),
+)
+
 TASK_TYPE = ((1, 'Задача'), (2, 'Веха'))
+
 
 # Create your models here.
 
@@ -55,9 +62,10 @@ class User(models.Model):
     job = models.CharField(max_length=250)
     phone = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
-    project_role = models.CharField(max_length=100)
+    project_role = models.SmallIntegerField(choices=ROLE)
     occupation = models.CharField(max_length=250)
     other = models.CharField(max_length=250)
+    project = models.ForeignKey(Project, on_delete='PROTECT', null = True, blank = True)
 
     def __str__(self):
         return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)

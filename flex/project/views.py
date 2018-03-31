@@ -1,7 +1,13 @@
-from .models import Project, Task
+from .models import Project, Task, User
+from .forms import UserForm
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.shortcuts import render
+from requests import request
+from django.shortcuts import redirect
+
 from django.views.generic.detail import DetailView
+
 
 # Create your views here.
 
@@ -10,6 +16,7 @@ class Home(TemplateView):
     Displaying active projects and tasks on home page
     """
     template_name = 'home.html'
+
 
     def get_context_data(self, **kwargs):
             context = super(Home, self).get_context_data(**kwargs)
@@ -41,6 +48,40 @@ class MyProjectList(ListView):
     def get_queryset(self):
         return Project.objects.all()
 
+
+
+
+
+class HR(ListView):
+    template_name = 'hr.html'
+    model = User
+
+
+def hr(request):
+    form=UserForm()
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect('hr_all')
+        else:
+            form = UserForm()
+    # projects = Project.objects.all()
+    return render(request, 'hr.html', {'form':form})
+    # return render(request, 'hr.html', {'projects':projects})
+
+def hr_all(request):
+    users = User.objects.all()
+    return render(request, 'hr_all.html', {'users': users})
+
+# class HrList(ListView):
+#     template_name ='hr_all.html'
+#     model=User
+#
+#     def get_queryset(self):
+#         return User.objects.all()
+
       
 class ProjectDashboard(TemplateView):
     """
@@ -58,5 +99,4 @@ class ProjectDashboard(TemplateView):
         return context
 
 
-def hr(request):
-    return render(request, 'hr.html', {'project': Project.name})
+
