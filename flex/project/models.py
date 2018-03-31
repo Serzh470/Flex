@@ -9,10 +9,15 @@ STATUS = (
     (5, 'Приостановлено')
 )
 
+
 ROLE = ((1,'Участник'),
         (2, 'Менеджер'),
         (3, 'Стейкхолдер'),
 )
+
+TASK_TYPE = ((1, 'Задача'), (2, 'Веха'))
+
+
 # Create your models here.
 
 
@@ -35,6 +40,7 @@ class Project(models.Model):
 
 class Task(models.Model):
     wbs_code = models.CharField(max_length=32, unique=True)
+    type = models.SmallIntegerField(choices=TASK_TYPE, default=1)
     name = models.CharField(max_length=255)
     description = models.TextField()
     start_date = models.DateField()
@@ -63,3 +69,4 @@ class User(models.Model):
 
     def __str__(self):
         return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
+

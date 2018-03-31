@@ -6,8 +6,10 @@ from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
 
-# Create your views here.
+from django.views.generic.detail import DetailView
 
+
+# Create your views here.
 
 class Home(TemplateView):
     """
@@ -16,13 +18,13 @@ class Home(TemplateView):
     template_name = 'home.html'
 
 
-def get_context_data(self, **kwargs):
-        context = super(Home, self).get_context_data(**kwargs)
-        context.update({
-            'tasks': Task.objects.filter(status=2),
-            'projects': Project.objects.filter(status=2),
-        })
-        return context
+    def get_context_data(self, **kwargs):
+            context = super(Home, self).get_context_data(**kwargs)
+            context.update({
+                'tasks': Task.objects.filter(status=2),
+                'projects': Project.objects.filter(status=2),
+            })
+            return context
 
 
 class MyTaskList(ListView):
@@ -45,6 +47,7 @@ class MyProjectList(ListView):
 
     def get_queryset(self):
         return Project.objects.all()
+
 
 
 
@@ -78,3 +81,22 @@ def hr_all(request):
 #
 #     def get_queryset(self):
 #         return User.objects.all()
+
+      
+class ProjectDashboard(TemplateView):
+    """
+    Display project dashboard
+    """
+    template_name = 'project_dashboard.html'
+    model = Project
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(ProjectDashboard, self).get_context_data(**kwargs)
+        context.update({
+            'tasks': Task.objects.filter(project_id=pk),
+            'project': Project.objects.filter(pk=pk)
+        })
+        return context
+
+
+

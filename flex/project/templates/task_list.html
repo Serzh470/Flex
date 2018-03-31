@@ -9,30 +9,40 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">WBS Код</th>
+                <th scope="col">Тип</th>
                 <th scope="col">Задача</th>
                 <th scope="col">Старт</th>
                 <th scope="col">Финиш</th>
                 <th scope="col">Исполнитель</th>
                 <th scope="col">Статус</th>
                 <th scope="col">Проект</th>
-                <th scope="col">Изменение</th>
             </tr>
         </thead>
         <tbody>
             {% for task in object_list %}
                 <tr>
-                    <th scope="row">{{ task.wbs_code }}</th>
-                    <td>{{ task.name }}</td>
-                    <td>{{ task.start_date }}</td>
-                    <td>{{ task.end_date }}</td>
-                    <td>{{ task.responsible }}</td>
-                    <td>{{ task.get_status_display }}</td>
-                    <td>{{ task.project }}</td>
-                    <td>
-                        <a href="/updtask/{{ task.id }}/">
-                            <button type="button" class="btn btn-primary">Редактировать</button>
-                        </a>
-                    </td>
+{#                    <th scope="row">#}
+                        <td>
+                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                                {{ task.wbs_code }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                                {{ task.get_type_display }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                                {{ task.name }}
+                            </a>
+                        </td>
+                        <td>{{ task.start_date }}</td>
+                        <td>{{ task.end_date }}</td>
+                        <td>{{ task.responsible }}</td>
+                        <td>{{ task.get_status_display }}</td>
+                        <td>{{ task.project }}</td>
+                    </a>
                 </tr>
             {% endfor %}
         </tbody>
