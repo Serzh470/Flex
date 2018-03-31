@@ -40,7 +40,7 @@ class Project(models.Model):
 
 class Task(models.Model):
     wbs_code = models.CharField(max_length=32, unique=True)
-    type = models.SmallIntegerField(choices=TASK_TYPE, default=1)
+    task_type = models.SmallIntegerField(choices=TASK_TYPE, default=1)
     name = models.CharField(max_length=255)
     description = models.TextField()
     start_date = models.DateField()
