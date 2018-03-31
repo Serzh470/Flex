@@ -12,15 +12,15 @@ class TaskForm(forms.ModelForm):
                              choices=TASK_TYPE)
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
     description = forms.CharField(required=False, widget=forms.Textarea(
-        attrs={'class': 'form-control', 'placeholder': 'Описание'}))
+        attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Описание'}))
     start_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control datepicker', 'placeholder': 'Старт: 01.12.1900'}))
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}))
     duration = forms.DurationField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность: '}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность'}))
     end_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Финиш: 01.12.1900'}))
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Финиш', 'type': 'date'}))
     predecessor = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача:'}))
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача'}))
     responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}))
     status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
                              choices=STATUS)
