@@ -4,6 +4,9 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <h1 class="h2">Задачи</h1>
+        <a href="/addtask/">
+        <button type="button" class="btn btn-primary">Добавить задачу</button>
+        </a>
     </div>
     <table class="table">
         <thead class="thead-light">
@@ -15,25 +18,27 @@
                 <th scope="col">Финиш</th>
                 <th scope="col">Исполнитель</th>
                 <th scope="col">Статус</th>
+                <th scope="col">Предыдущая задача</th>
                 <th scope="col">Проект</th>
             </tr>
         </thead>
         <tbody>
-            {% for task in object_list %}
+
+            {% for task in tasks %}
                 <tr>
 {#                    <th scope="row">#}
                         <td>
-                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                            <a href="/updtask/{{ task.pk }}/" class="card-link">
                                 {{ task.wbs_code }}
                             </a>
                         </td>
                         <td>
-                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                            <a href="/updtask/{{ task.pk }}/" class="card-link">
                                 {{ task.get_task_type_display }}
                             </a>
                         </td>
                         <td>
-                            <a href="/updtask/{{ task.id }}/" class="card-link">
+                            <a href="/updtask/{{ task.pk }}/" class="card-link">
                                 {{ task.name }}
                             </a>
                         </td>
@@ -41,13 +46,19 @@
                         <td>{{ task.end_date }}</td>
                         <td>{{ task.responsible }}</td>
                         <td>{{ task.get_status_display }}</td>
+                        <td>
+                            {% for rel in tasksrel %}
+                                {% if rel.successor.id == task.id %}
+                                    {{ rel.predecessors.name }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>{{ task.project }}</td>
+
                     </a>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="/addtask/">
-        <button type="button" class="btn btn-primary">Добавить задачу</button>
-    </a>
+
 {% endblock %}
