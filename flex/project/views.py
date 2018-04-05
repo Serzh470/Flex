@@ -1,12 +1,11 @@
 from .models import Project, Task, User, TaskRel
-from .forms import UserForm, NewTask
+from .forms import UserForm
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
 
 from django.views.generic.detail import DetailView
 
@@ -104,90 +103,3 @@ class ProjectDashboard(TemplateView):
             'tasksrel': TaskRel.objects.all(),
         })
         return context
-
-
-# def TaskCreate(request):
-#     form = NewTask()
-#     if request.method == 'POST':
-#         # if form.is_valid():
-#         task = Task(
-#             wbs_code=form.cleaned_data["wbs_code"],
-#             task_type=form.cleaned_data["task_type"],
-#             name=form.cleaned_data["name"],
-#             description=form.cleaned_data["description"],
-#             start_date=form.cleaned_data["start_date"],
-#             duration=form.cleaned_data["duration"],
-#             end_date=form.cleaned_data["end_date"],
-#             responsible=form.cleaned_data["responsible"],
-#             status=form.cleaned_data["status"],
-#             project=form.cleaned_data["project"],
-#         )
-#         task.save()
-#         messages.add_message(request, messages.SUCCESS, "Новая задача создана")
-#         # predecessors = TaskRel(
-#         #     predecessors=form.cleaned_data["predecessors"],
-#         #     successor=task.id,
-#         # )
-#         # predecessors.save()
-#         return redirect('my_tasks/')
-#         # else:
-#         #     form = NewTask()
-#         #     messages.add_message(request, messages.ERROR, "Задача не создана")
-#     return render(request, 'create_task.html', {'form': form})
-
-
-def task_create(request):
-    form = NewTask()
-    if request.method == "POST":
-        form = NewTask(request.POST)
-        if form.is_valid():
-            task = Task(
-                wbs_code=form.cleaned_data["wbs_code"],
-                task_type=form.cleaned_data["task_type"],
-                name=form.cleaned_data["name"],
-                description=form.cleaned_data["description"],
-                start_date=form.cleaned_data["start_date"],
-                duration=form.cleaned_data["duration"],
-                end_date=form.cleaned_data["end_date"],
-                responsible=form.cleaned_data["responsible"],
-                status=form.cleaned_data["status"],
-                project=form.cleaned_data["project"],
-            )
-            task.save()
-            # predecessors = TaskRel(
-            #     predecessors=form.cleaned_data["predecessors"],
-            #     successor=task.id,
-            # )
-            # predecessors.save()
-            messages.add_message(request, messages.SUCCESS, "Новая задача создана")
-            return redirect('my_tasks/')
-    else:
-        form = NewTask()
-    return render(request, 'create_task.html', {'form': form})
-
-
-def task_edit(request, pk):
-    cur_task = get_object_or_404(Task, pk=pk)
-    if request.method == "POST":
-        form = NewTask(request.POST, instance=cur_task)
-        if form.is_valid():
-            task = Task(
-                wbs_code=form.cleaned_data["wbs_code"],
-                task_type=form.cleaned_data["task_type"],
-                name=form.cleaned_data["name"],
-                description=form.cleaned_data["description"],
-                start_date=form.cleaned_data["start_date"],
-                duration=form.cleaned_data["duration"],
-                end_date=form.cleaned_data["end_date"],
-                responsible=form.cleaned_data["responsible"],
-                status=form.cleaned_data["status"],
-                project=form.cleaned_data["project"],
-            )
-            task.save()
-            messages.add_message(request, messages.SUCCESS, "Задача изменена")
-            return redirect('my_tasks/')
-        else:
-            form = NewTask(instance=cur_task)
-        return render(request, 'create_task.html', {'form': form})
-
-

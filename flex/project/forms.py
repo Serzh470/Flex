@@ -1,9 +1,9 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task, STATUS, User, TASK_TYPE
+from .models import Project, Task, STATUS, User, TASK_TYPE, TaskRel
 
 
-class NewTask(forms.Form):
+class TaskForm(forms.ModelForm):
     """
     Create new task object
     """
@@ -20,14 +20,13 @@ class NewTask(forms.Form):
         required=False, widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 3}), label='Описание')
     start_date = forms.DateField(
-        widget=forms.DateInput(
-            attrs={'class': 'form-control'}), label='Старт')
+        widget=DatePicker()
     duration = forms.DurationField(
         widget=forms.TextInput(
             attrs={'class': 'form-control'}), label='Продолжительность')
     end_date = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control', 'type': 'date'}), label='Дата завершения')
+            attrs={'class': 'form-control'}, format='%d.%m.%Y'), label='Дата завершения')
     responsible = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control'}), label='Исполнитель')
@@ -37,82 +36,40 @@ class NewTask(forms.Form):
     project = forms.ModelChoiceField(
         queryset=Project.objects.all(), required=False, widget=forms.Select(
             attrs={'class': 'form-control'}), label='Проект')
-    # predecessors = forms.ModelMultipleChoiceField(
-    #     queryset=Task.objects.all(), required=False, widget=forms.CheckboxSelectMultiple(
-    #         attrs={'class': 'form-control'}), label='Предыдущая задача')
 
-# class TaskForm(forms.ModelForm):
-#     """
-#     Create new task object
-#     """
-#     wbs_code = forms.CharField(
-#         widget=forms.TextInput(
-#             attrs={'class': 'form-control'}), label='WBS код')
-#     task_type = forms.ChoiceField(
-#         widget=forms.Select(
-#             attrs={'class': 'form-control'}), choices=TASK_TYPE, label='Тип')
-#     name = forms.CharField(
-#         widget=forms.TextInput(
-#             attrs={'class': 'form-control'}), label='Название')
-#     description = forms.CharField(
-#         required=False, widget=forms.Textarea(
-#             attrs={'class': 'form-control', 'rows': 3}), label='Описание')
-#     start_date = forms.DateField(
-#         widget=forms.DateInput(
-#             attrs={'class': 'form-control'}), label='Старт')
-#     duration = forms.DurationField(
-#         widget=forms.TextInput(
-#             attrs={'class': 'form-control'}), label='Продолжительность')
-#     end_date = forms.DateField(
-#         widget=forms.DateInput(
-#             attrs={'class': 'form-control', 'type': 'date'}), label='Дата завершения')
-#     responsible = forms.CharField(
-#         widget=forms.TextInput(
-#             attrs={'class': 'form-control'}), label='Исполнитель')
-#     status = forms.ChoiceField(
-#         widget=forms.Select(
-#             attrs={'class': 'form-control'}), choices=STATUS, label='Статус')
-#     project = forms.ModelChoiceField(
-#         queryset=Project.objects.all(), required=False, widget=forms.Select(
-#             attrs={'class': 'form-control'}), label='Проект')
-#     predecessors = forms.ModelMultipleChoiceField(
-#         queryset=Task.objects.all(), required=False,  widget=forms.CheckboxSelectMultiple(
-#             attrs={'class': 'form-control'}), label='Предыдущая задача')
-#
-#     class Meta:
-#         model = Task
-#         fields = [
-#             'wbs_code',
-#             'task_type',
-#             'name',
-#             'description',
-#             'start_date',
-#             'duration',
-#             'end_date',
-#             'responsible',
-#             'status',
-#             'project',
-#             'predecessors',
-#         ]
-#
-#
-# class TaskCreate(CreateView):
-#     form_class = TaskForm
-#     template_name = 'create_task.html'
-#     success_url = '/mytasks/'
-#
-#
-# class TaskUpdate(UpdateView):
-#     form_class = TaskForm
-#     template_name = 'create_task.html'
-#     success_url = '/mytasks/'
-#     queryset = Task.objects.all()
-#
-#
-# class TaskDelete(DeleteView):
-#     model = Task
-#     template_name = 'delete_task.html'
-#     success_url = '/mytasks/'
+    class Meta:
+        model = Task
+        fields = [
+            'wbs_code',
+            'task_type',
+            'name',
+            'description',
+            'start_date',
+            'duration',
+            'end_date',
+            'responsible',
+            'status',
+            'project',
+        ]
+
+
+class TaskCreate(CreateView):
+    form_class = TaskForm
+    template_name = 'create_task.html'
+    success_url = '/mytasks/'
+
+
+class TaskUpdate(UpdateView):
+    form_class = TaskForm
+    template_name = 'create_task.html'
+    success_url = '/mytasks/'
+    queryset = Task.objects.all()
+
+
+class TaskDelete(DeleteView):
+    model = Task
+    template_name = 'delete_task.html'
+    success_url = '/mytasks/'
 
 
 class UserForm(forms.ModelForm):
@@ -136,4 +93,31 @@ class UserCreate(CreateView):
     form_class = UserForm
     template_name = 'hr.html'
     success_url = '/'
+
+
+class TaskRelation(forms.ModelForm):
+    """
+    Create new task object
+    """
+    successor = forms.ModelChoiceField(
+        queryset=Task.objects.all(), widget=forms.Select(
+            attrs={'class': 'form-control'}), label='Текущая задача')
+
+    predecessors = forms.ModelChoiceField(
+        queryset=Task.objects.all(), required=False, widget=forms.Select(
+            attrs={'class': 'form-control'}), label='Предыдущая задача')
+
+    class Meta:
+        model = Task
+        fields = [
+            'successor',
+            'predecessors',
+        ]
+
+
+class RelateTask(UpdateView):
+    form_class = TaskRelation
+    template_name = "create_rel.html"
+    success_url = "/mytask"
+    queryset = Task.objects.all()
 

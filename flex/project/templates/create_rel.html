@@ -1,16 +1,14 @@
 {% extends 'index.html' %}
 
 {% block create_task %}
-
-
     <div calss="container">
         <div class="col-5">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
 
             {% if task.id > 0 %}
-                <h1 class="h2">Изменить задачу</h1>
+                <h1 class="h2">Изменить связь</h1>
             {% else %}
-                <h1 class="h2">Создать задачу</h1>
+                <h1 class="h2">Создать связь</h1>
             {% endif %}
             </div>
             {% if messages %}
@@ -47,15 +45,4 @@
 
         </div>
     </div>
-
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker12').datetimepicker({
-            inline: true,
-            sideBySide: true,
-            format: 'DD.MM.YYYY' /*remove this line if you want to use time as well */
-        });
-    });
-</script>
-
 {% endblock %}
