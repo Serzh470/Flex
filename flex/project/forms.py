@@ -20,13 +20,15 @@ class TaskForm(forms.ModelForm):
         required=False, widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 3}), label='Описание')
     start_date = forms.DateField(
-        widget=DatePicker()
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
+
     duration = forms.DurationField(
         widget=forms.TextInput(
             attrs={'class': 'form-control'}), label='Продолжительность')
     end_date = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control'}, format='%d.%m.%Y'), label='Дата завершения')
+            attrs={'class': 'form-control', 'type': 'date'}, format='%d.%m.%Y'), label='Дата завершения')
     responsible = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control'}), label='Исполнитель')
@@ -99,23 +101,25 @@ class TaskRelation(forms.ModelForm):
     """
     Create new task object
     """
-    successor = forms.ModelChoiceField(
-        queryset=Task.objects.all(), widget=forms.Select(
-            attrs={'class': 'form-control'}), label='Текущая задача')
-
     predecessors = forms.ModelChoiceField(
-        queryset=Task.objects.all(), required=False, widget=forms.Select(
+        queryset=Task.objects.all(), widget=forms.Select(
             attrs={'class': 'form-control'}), label='Предыдущая задача')
 
     class Meta:
         model = Task
         fields = [
-            'successor',
             'predecessors',
         ]
 
 
-class RelateTask(UpdateView):
+class NewRelateTask(CreateView):
+    form_class = TaskRelation
+    template_name = "create_rel.html"
+    success_url = "/mytask"
+    queryset = Task.objects.all()
+
+
+class UpdRelateTask(UpdateView):
     form_class = TaskRelation
     template_name = "create_rel.html"
     success_url = "/mytask"

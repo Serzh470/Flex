@@ -46,15 +46,13 @@ class Task(models.Model):
     wbs_code = models.CharField(max_length=32, unique=True)
     task_type = models.SmallIntegerField(choices=TASK_TYPE, default=1)
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    start_date = models.DateField()
+    description = models.TextField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
     duration = models.DurationField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     responsible = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS)
     project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
-    # predecessors = models.ForeignKey(to='self', on_delete='PROTECT', null=True, blank=True)
-    # predecessors = models.ManyToManyField('self', blank=True)
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)

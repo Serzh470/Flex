@@ -1,5 +1,5 @@
 from .models import Project, Task, User, TaskRel
-from .forms import UserForm
+from .forms import UserForm, TaskRelation
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
@@ -102,4 +102,25 @@ class ProjectDashboard(TemplateView):
             'project': Project.objects.filter(pk=pk),
             'tasksrel': TaskRel.objects.all(),
         })
+        print(context)
         return context
+
+
+def new_relation(request, pk):
+    form = TaskRelation()
+    if request.method == 'POST':
+        TaskRel.objects.create(successor_id=pk, predecessors_id=request.POST['predecessors'])
+        return redirect('/mytasks')
+    return render(request, 'create_rel.html', {'form': form})
+
+
+def upd_relation(request, pk):
+    form = TaskRelation()
+    rel = TaskRel.objects.get(pk=pk)
+    if request.method == 'POST':
+        rel.predecessors_id = request.POST['predecessors']
+        rel.save()
+        return redirect('/mytasks')
+    else:
+        form = TaskRelation(initial={'predecessors': rel.predecessors})
+        return render(request, 'create_rel.html', {'form': form})

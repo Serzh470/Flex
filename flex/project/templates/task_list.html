@@ -47,11 +47,19 @@
                         <td>{{ task.responsible }}</td>
                         <td>{{ task.get_status_display }}</td>
                         <td>
-                            {% for rel in tasksrel %}
-                                {% if rel.successor.id == task.id %}
-                                    {{ rel.predecessors.name }}<br>
-                                {% endif %}
-                            {% endfor %}
+
+                                {% for rel in tasksrel %}
+                                    {% if rel.successor.id == task.id %}
+                                        <a href="/upd_rel_task/{{ rel.pk }}/" class="card-link">
+                                            {{ rel.predecessors.name }}<br>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+
+                            <a href="/new_rel_task/{{ task.pk }}/" class="card-link">
+                                <p>Добавить связь</p>
+                            </a>
+
                         </td>
                         <td>{{ task.project }}</td>
 
