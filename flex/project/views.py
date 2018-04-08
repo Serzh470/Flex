@@ -123,4 +123,15 @@ def upd_relation(request, pk):
         return redirect('/mytasks')
     else:
         form = TaskRelation(initial={'predecessors': rel.predecessors})
-        return render(request, 'create_rel.html', {'form': form})
+        return render(request, 'edit_rel.html', {'form': form, 'rel': pk})
+
+
+def del_relation(request, pk):
+    form = None
+    rel = TaskRel.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        rel.delete()
+        return redirect('/mytasks')
+    else:
+        return render(request, 'delete_rel.html', {'form': form})

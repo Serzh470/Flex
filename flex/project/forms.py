@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task, STATUS, User, TASK_TYPE, TaskRel
+from .models import Project, Task, STATUS, User, TASK_TYPE
 
 
 class TaskForm(forms.ModelForm):
@@ -22,7 +22,6 @@ class TaskForm(forms.ModelForm):
     start_date = forms.DateField(
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
-
     duration = forms.DurationField(
         widget=forms.TextInput(
             attrs={'class': 'form-control'}), label='Продолжительность')
@@ -110,18 +109,4 @@ class TaskRelation(forms.ModelForm):
         fields = [
             'predecessors',
         ]
-
-
-class NewRelateTask(CreateView):
-    form_class = TaskRelation
-    template_name = "create_rel.html"
-    success_url = "/mytask"
-    queryset = Task.objects.all()
-
-
-class UpdRelateTask(UpdateView):
-    form_class = TaskRelation
-    template_name = "create_rel.html"
-    success_url = "/mytask"
-    queryset = Task.objects.all()
 

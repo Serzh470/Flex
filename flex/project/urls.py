@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard, new_relation, upd_relation
+from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard, new_relation, upd_relation, del_relation
 from .forms import TaskCreate, TaskUpdate, TaskDelete
 
 
@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^project_dashboard/(?P<pk>\d+)/$', ProjectDashboard.as_view(), name='project_dashboard'),
     url(r'^new_rel_task/(?P<pk>\d+)/$', new_relation, name='new_rel_task'),
     url(r'^upd_rel_task/(?P<pk>\d+)/$', upd_relation, name='upd_rel_task'),
-
+    url(r'^del_rel_task/(?P<pk>\d+)/$', del_relation, name='del_rel_task'),
 ]

@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block delete_task %}
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Удалить связь {{ rel.successor }} - {{ rel.predecessors }}?</h4>
+        <p>Проверьте необходимость удаления связи.</p>
+        <hr>
+        <p>Это действие нельзя отменить или восстановить задачу обратно.</p>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Удалить</button>
+            <a href="/mytasks/">
+                <button type="button" class="btn btn-primary">Отмена</button>
+            </a>
+        </form>
+    </div>
+{% endblock %}
