@@ -32,9 +32,6 @@ class MyTaskList(TemplateView):
     Displaying task list on task list page
     """
     template_name = 'task_list.html'
-    # model = Task
-    # def get_queryset(self):
-    #     return Task.objects.all(), TaskRel.objects.all()
 
     def get_context_data(self, **kwargs):
             context = super(MyTaskList, self).get_context_data(**kwargs)
