@@ -2,10 +2,10 @@
 
 {% block delete_task %}
     <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">Удалить связь {{ rel.successor }} - {{ rel.predecessors }}?</h4>
+        <h4 class="alert-heading">Удалить связь {{ rel.successor.name }} <-- {{ rel.predecessors.name }}?</h4>
         <p>Проверьте необходимость удаления связи.</p>
         <hr>
-        <p>Это действие нельзя отменить или восстановить задачу обратно.</p>
+        <p>Это действие нельзя отменить или восстановить связь обратно.</p>
 
         <form action="" method="post">
             {% csrf_token %}

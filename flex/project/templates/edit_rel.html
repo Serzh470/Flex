@@ -22,14 +22,12 @@
             {% endif %}
             <form action="" method="post">
                 {% csrf_token %}
-
                 {% for field in form %}
                     <div class="form-group">
                         {{ field.label }}
                         {{ field }}
                     </div>
                 {% endfor %}
-
                         <button type="submit" class="btn btn-success">Сохранить</button>
                         <a href="/del_rel_task/{{ rel }}">
                             <button type="button" class="btn btn-warning">Удалить</button>
@@ -37,8 +35,6 @@
                         <a href="/mytasks/">
                             <button type="button" class="btn btn-secondary">Отмена</button>
                         </a>
-
-
             </form>
         </div>
     </div>

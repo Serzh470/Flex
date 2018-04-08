@@ -134,4 +134,4 @@ def del_relation(request, pk):
         rel.delete()
         return redirect('/mytasks')
     else:
-        return render(request, 'delete_rel.html', {'form': form})
+        return render(request, 'delete_rel.html', {'form': form, 'rel': rel})
