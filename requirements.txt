@@ -1,2 +1,3 @@
 # python verion 3.5.2
 django==2.0.3
+django-bootstrap-static==4.0.0

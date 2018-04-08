@@ -1,6 +1,7 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
 from .models import Project, Task, STATUS, User, TASK_TYPE
+from bootstrap_datepicker.widgets import DatePicker
 
 
 
@@ -14,14 +15,14 @@ class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
     description = forms.CharField(required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Описание'}))
+    # start_date = forms.DateField(
+    #     widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}))
     start_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}))
+        widget=DatePicker(options={"format": "mm.dd.yyyy"}))
     duration = forms.DurationField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность'}))
     end_date = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Финиш', 'type': 'date'}))
-    predecessor = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача'}))
     responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}))
     status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
                              choices=STATUS)
@@ -39,7 +40,6 @@ class TaskForm(forms.ModelForm):
             'start_date',
             'duration',
             'end_date',
-            'predecessor',
             'responsible',
             'status',
             'project',

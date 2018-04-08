@@ -46,8 +46,6 @@ class Task(models.Model):
     start_date = models.DateField()
     duration = models.DurationField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    predecessor = models.IntegerField(null=True, blank=True)
-    # successor = models.IntegerField(null=True, blank=True)
     responsible = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS)
     project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
