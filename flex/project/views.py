@@ -6,6 +6,7 @@ from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.views.generic.detail import DetailView
 
@@ -105,28 +106,44 @@ class ProjectDashboard(TemplateView):
 
 def new_relation(request, pk):
     form = TaskRelation()
+    error_message = ''
     if request.method == 'POST':
-        TaskRel.objects.create(successor_id=pk, predecessors_id=request.POST['predecessors'])
-        return redirect('/mytasks')
-    return render(request, 'create_rel.html', {'form': form})
+        try:
+            if pk == request.POST['predecessors']:
+                error_message = ('Нельзя связывать задачу с самой собой', )
+            elif TaskRel.objects.get(successor_id=pk, predecessors_id=request.POST['predecessors']) in TaskRel.objects.all():
+                error_message = ('Такая связь уже существует', )
+            else:
+                TaskRel.objects.create(successor_id=pk, predecessors_id=request.POST['predecessors'])
+                return redirect('/mytasks')
+        except ObjectDoesNotExist:
+            TaskRel.objects.create(successor_id=pk, predecessors_id=request.POST['predecessors'])
+            return redirect('/mytasks')
+
+    return render(request, 'create_rel.html', {'form': form, 'messages': error_message})
 
 
 def upd_relation(request, pk):
     form = TaskRelation()
     rel = TaskRel.objects.get(pk=pk)
+    print(rel.successor_id)
+    error_message = ''
     if request.method == 'POST':
-        rel.predecessors_id = request.POST['predecessors']
-        rel.save()
-        return redirect('/mytasks')
-    else:
-        form = TaskRelation(initial={'predecessors': rel.predecessors})
-        return render(request, 'edit_rel.html', {'form': form, 'rel': pk})
+        if rel.successor_id == request.POST['predecessors']:
+            error_message = ('Нельзя связывать задачу с самой собой', )
+        elif TaskRel.objects.filter(predecessors_id=pk) in TaskRel.objects.all():
+            error_message = ('Такая связь уже существует', )
+        else:
+            rel.predecessors_id = request.POST['predecessors']
+            rel.save()
+            return redirect('/mytasks')
+    form = TaskRelation(initial={'predecessors': rel.predecessors})
+    return render(request, 'edit_rel.html', {'form': form, 'rel': pk, 'messages': error_message})
 
 
 def del_relation(request, pk):
     form = None
     rel = TaskRel.objects.get(pk=pk)
-
     if request.method == 'POST':
         rel.delete()
         return redirect('/mytasks')
