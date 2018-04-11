@@ -108,38 +108,23 @@ def new_relation(request, pk):
     form = TaskRelation()
     error_message = ''
     if request.method == 'POST':
-        # task, created = TaskRel.objects.get_or_create(successor_id=pk, predecessors_id=request.POST['predecessors'])
-        # if pk == request.POST['predecessors']:
-        #     error_message = ('Нельзя связывать задачу с самой собой', )
-        # elif not created:
-        #     error_message = ('Такая связь уже существует', )
-        # else:
-        #     TaskRel.objects.create(successor_id=pk, predecessors_id=request.POST['predecessors'])
-        #     return redirect('/mytasks')
-        try:
-            if pk == request.POST['predecessors']:
-                error_message=('Нельзя связывать задачу с самой собой',)
-            elif TaskRel.objects.get(successor_id=pk,
-                                     predecessors_id=request.POST['predecessors']) in TaskRel.objects.all():
-                error_message=('Такая связь уже существует',)
+        if pk != request.POST['predecessors']:
+            task, created = TaskRel.objects.get_or_create(successor_id=pk, predecessors_id=request.POST['predecessors'])
+            if not created:
+                error_message = ('Такая связь уже существует',)
             else:
-                TaskRel.objects.create(successor_id=pk,predecessors_id=request.POST['predecessors'])
                 return redirect('/mytasks')
-        except ObjectDoesNotExist:
-            TaskRel.objects.create(successor_id=pk,predecessors_id=request.POST['predecessors'])
-            return redirect('/mytasks')
-
+        else:
+            error_message = ('Нельзя связывать задачу с самой собой', )
     return render(request, 'create_rel.html', {'form': form, 'messages': error_message})
 
 
 def upd_relation(request, pk):
     form = TaskRelation()
     rel = TaskRel.objects.get(pk=pk)
-    print('rel.successor_id=', rel.successor_id)
     error_message = ''
     if request.method == 'POST':
-        print("request.POST['predecessor']=", request.POST['predecessors'])
-        if rel.successor_id == request.POST['predecessors']:
+        if int(rel.successor_id) == int(request.POST['predecessors']):
             error_message = ('Нельзя связывать задачу с самой собой', )
         elif TaskRel.objects.filter(
                 predecessors_id=request.POST['predecessors'], successor_id=rel.successor_id).exists():
