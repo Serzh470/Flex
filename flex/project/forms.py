@@ -3,31 +3,40 @@ from django import forms
 from .models import Project, Task, STATUS, User, TASK_TYPE
 
 
-
 class TaskForm(forms.ModelForm):
     """
     Create new task object
     """
-    wbs_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'WBS код'}))
-    task_type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Задача или Веха'}),
-                             choices=TASK_TYPE)
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}))
-    description = forms.CharField(required=False, widget=forms.Textarea(
-        attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Описание'}))
+    wbs_code = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control'}), label='WBS код')
+    task_type = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}), choices=TASK_TYPE, label='Тип')
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control'}), label='Название')
+    description = forms.CharField(
+        required=False, widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3}), label='Описание')
     start_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}))
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
     duration = forms.DurationField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Продолжительность'}))
+        widget=forms.TextInput(
+            attrs={'class': 'form-control'}), label='Продолжительность')
     end_date = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Финиш', 'type': 'date'}))
-    predecessor = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Предыдущая задача'}))
-    responsible = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}))
-    status = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус'}),
-                             choices=STATUS)
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'type': 'date'}, format='%d.%m.%Y'), label='Дата завершения')
+    responsible = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control'}), label='Исполнитель')
+    status = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}), choices=STATUS, label='Статус')
     project = forms.ModelChoiceField(
-        queryset=Project.objects.all(), required=False, widget=forms.Select(attrs={
-            'class': 'form-control', 'placeholder': 'Входит в проект'}))
+        queryset=Project.objects.all(), required=False, widget=forms.Select(
+            attrs={'class': 'form-control'}), label='Проект')
 
     class Meta:
         model = Task
@@ -39,12 +48,10 @@ class TaskForm(forms.ModelForm):
             'start_date',
             'duration',
             'end_date',
-            'predecessor',
             'responsible',
             'status',
             'project',
         ]
-
 
 
 class TaskCreate(CreateView):
@@ -66,9 +73,7 @@ class TaskDelete(DeleteView):
     success_url = '/mytasks/'
 
 
-
 class UserForm(forms.ModelForm):
-
 
     class Meta:
         model = User
@@ -84,8 +89,24 @@ class UserForm(forms.ModelForm):
             'project'
         ]
 
+
 class UserCreate(CreateView):
     form_class = UserForm
     template_name = 'hr.html'
     success_url = '/'
+
+
+class TaskRelation(forms.ModelForm):
+    """
+    Create new task object
+    """
+    predecessors = forms.ModelChoiceField(
+        queryset=Task.objects.all(), widget=forms.Select(
+            attrs={'class': 'form-control'}), label='Предыдущая задача')
+
+    class Meta:
+        model = Task
+        fields = [
+            'predecessors',
+        ]
 

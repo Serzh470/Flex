@@ -1,16 +1,14 @@
 {% extends 'index.html' %}
 
 {% block create_task %}
-
-
     <div class="container">
         <div class="col-5">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
 
             {% if task.id > 0 %}
-                <h1 class="h2">Изменить задачу</h1>
+                <h1 class="h2">Изменить связь</h1>
             {% else %}
-                <h1 class="h2">Создать задачу</h1>
+                <h1 class="h2">Создать связь</h1>
             {% endif %}
             </div>
             {% if messages %}
@@ -31,18 +29,10 @@
                     </div>
                 {% endfor %}
                     <button type="submit" class="btn btn-success">Сохранить</button>
-                {% if task.id > 0 %}
-                    <a href="/mytasks/">
+
+                    <a href="/mytasks">
                         <button type="button" class="btn btn-secondary">Отмена</button>
                     </a>
-                    <a href="/deltask/{{ task.id }}/">
-                        <button type="button" class="btn btn-warning">Удалить</button>
-                    </a>
-                {% else %}
-                    <a href="/mytasks/">
-                        <button type="button" class="btn btn-secondary">Отмена</button>
-                    </a>
-                {% endif %}
             </form>
         </div>
     </div>
