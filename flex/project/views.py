@@ -6,8 +6,6 @@ from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
-
 from django.views.generic.detail import DetailView
 
 
