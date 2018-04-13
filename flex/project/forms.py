@@ -1,11 +1,36 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
 from .models import Project, Task, STATUS, User, TASK_TYPE
+from django.forms.widgets import TextInput
+from django.utils.dateparse import parse_duration
+import datetime
+
+
+class DurationInput(TextInput):
+    """
+    Custom input widget for duration field, convert seconds in parsing to days
+    """
+    def format_value(self, value):
+        if 'день' in value:
+            value = value.replace(' день', '')
+        elif 'дня' in value:
+            value = value.replace(' дня', '')
+        elif 'дней' in value:
+            value = value.replace(' дней', '')
+        duration = parse_duration(value)
+        duration_days = duration.seconds
+        days = datetime.timedelta(days=duration_days)
+        if int(value[-1]) == 1:
+            return '{} день'.format(days.days)
+        elif 1 < int(value[-1]) <= 4:
+            return '{} дня'.format(days.days)
+        else:
+            return '{} дней'.format(days.days)
 
 
 class TaskForm(forms.ModelForm):
     """
-    Create new task object
+    Create new task object for with many settings for each field
     """
     wbs_code = forms.CharField(
         widget=forms.TextInput(
@@ -23,8 +48,7 @@ class TaskForm(forms.ModelForm):
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
     duration = forms.DurationField(
-        widget=forms.TextInput(
-            attrs={'class': 'form-control'}), label='Продолжительность')
+        widget=DurationInput(attrs={'class': 'form-control'}), label='Продолжительность')
     end_date = forms.DateField(
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'type': 'date'}, format='%d.%m.%Y'), label='Дата завершения')
@@ -98,7 +122,7 @@ class UserCreate(CreateView):
 
 class TaskRelation(forms.ModelForm):
     """
-    Create new task object
+    Create new
     """
     predecessors = forms.ModelChoiceField(
         queryset=Task.objects.all(), widget=forms.Select(
