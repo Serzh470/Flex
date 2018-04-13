@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
-    'bootstrap_datepicker',
 ]
 
 MIDDLEWARE = [

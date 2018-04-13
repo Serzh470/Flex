@@ -1,11 +1,11 @@
-from .models import Project, Task, User
-from .forms import UserForm
+from .models import Project, Task, User, TaskRel
+from .forms import UserForm, TaskRelation
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
-
+from django.contrib import messages
 from django.views.generic.detail import DetailView
 
 
@@ -17,7 +17,6 @@ class Home(TemplateView):
     """
     template_name = 'home.html'
 
-
     def get_context_data(self, **kwargs):
             context = super(Home, self).get_context_data(**kwargs)
             context.update({
@@ -27,15 +26,19 @@ class Home(TemplateView):
             return context
 
 
-class MyTaskList(ListView):
+class MyTaskList(TemplateView):
     """
     Displaying task list on task list page
     """
     template_name = 'task_list.html'
-    model = Task
 
-    def get_queryset(self):
-        return Task.objects.all()
+    def get_context_data(self, **kwargs):
+            context = super(MyTaskList, self).get_context_data(**kwargs)
+            context.update({
+                'tasks': Task.objects.all(),
+                'tasksrel': TaskRel.objects.all(),
+            })
+            return context
 
 
 class MyProjectList(ListView):
@@ -49,16 +52,13 @@ class MyProjectList(ListView):
         return Project.objects.all()
 
 
-
-
-
 class HR(ListView):
     template_name = 'hr.html'
     model = User
 
 
 def hr(request):
-    form=UserForm()
+    form = UserForm()
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
@@ -70,6 +70,7 @@ def hr(request):
     # projects = Project.objects.all()
     return render(request, 'hr.html', {'form':form})
     # return render(request, 'hr.html', {'projects':projects})
+
 
 def hr_all(request):
     users = User.objects.all()
@@ -88,15 +89,57 @@ class ProjectDashboard(TemplateView):
     Display project dashboard
     """
     template_name = 'project_dashboard.html'
-    model = Project
+    # model = Project
 
     def get_context_data(self, pk, **kwargs):
         context = super(ProjectDashboard, self).get_context_data(**kwargs)
         context.update({
             'tasks': Task.objects.filter(project_id=pk),
-            'project': Project.objects.filter(pk=pk)
+            'project': Project.objects.filter(pk=pk),
+            'tasksrel': TaskRel.objects.all(),
         })
+        print(context)
         return context
 
 
+def new_relation(request, pk):
+    form = TaskRelation()
+    error_message = ''
+    if request.method == 'POST':
+        if pk != request.POST['predecessors']:
+            task, created = TaskRel.objects.get_or_create(successor_id=pk, predecessors_id=request.POST['predecessors'])
+            if not created:
+                error_message = ('Такая связь уже существует',)
+            else:
+                return redirect('/mytasks')
+        else:
+            error_message = ('Нельзя связывать задачу с самой собой', )
+    return render(request, 'create_rel.html', {'form': form, 'messages': error_message})
 
+
+def upd_relation(request, pk):
+    form = TaskRelation()
+    rel = TaskRel.objects.get(pk=pk)
+    error_message = ''
+    if request.method == 'POST':
+        if int(rel.successor_id) == int(request.POST['predecessors']):
+            error_message = ('Нельзя связывать задачу с самой собой', )
+        elif TaskRel.objects.filter(
+                predecessors_id=request.POST['predecessors'], successor_id=rel.successor_id).exists():
+            error_message = ('Такая связь уже существует', )
+        else:
+            rel.predecessors_id = request.POST['predecessors']
+            rel.save()
+            return redirect('/mytasks')
+    form = TaskRelation(initial={'predecessors': rel.predecessors})
+    return render(request, 'edit_rel.html', {'form': form, 'rel': pk, 'messages': error_message})
+
+
+def del_relation(request, pk):
+    form = None
+    rel = TaskRel.objects.get(pk=pk)
+    if request.method == 'POST':
+        rel.delete()
+        return redirect('/mytasks')
+    else:
+        return render(request, 'delete_rel.html', {'form': form, 'rel': rel})

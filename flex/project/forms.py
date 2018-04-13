@@ -8,53 +8,65 @@ class TaskForm(forms.ModelForm):
     Create new task object
     """
     wbs_code = forms.CharField(
+        label='WBS код',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'WBS код'}
+            attrs={'class': 'form-control'}
         )
     )
     task_type = forms.ChoiceField(
+        choices=TASK_TYPE,
+        label='Тип',
         widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Задача или Веха'}
-        ), choices=TASK_TYPE
+            attrs={'class': 'form-control'}
+        )
     )
     name = forms.CharField(
+        label='Название',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Название'}
+            attrs={'class': 'form-control'}
         )
     )
     description = forms.CharField(
+        label='Описание',
         required=False, widget=forms.Textarea(
-            attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Описание'}
+            attrs={'class': 'form-control', 'rows': 3}
         )
     )
     start_date = forms.DateField(
+        label='Дата начала',
         widget=forms.DateInput(
             attrs={'class': 'datepicker form-control'}
         ), required=False
     )
     duration = forms.DurationField(
+        label='Продолжительность',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Продолжительность'}
+            attrs={'class': 'form-control'}
         ), required=False
     )
     end_date = forms.DateField(
+        label='Дата завершения',
         widget=forms.DateInput(
             attrs={'class': 'datepicker form-control'}
         ), required=False
     )
     responsible = forms.CharField(
+        label='Исполнитель',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Исполнитель'}
+            attrs={'class': 'form-control'}
         )
     )
     status = forms.ChoiceField(
+        choices=STATUS,
+        label='Статус',
         widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Статус'}
-        ), choices=STATUS
+            attrs={'class': 'form-control'}
+        )
     )
     project = forms.ModelChoiceField(
+        label='Проект',
         queryset=Project.objects.all(), required=False, widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Входит в проект'}
+            attrs={'class': 'form-control'}
         )
     )
 
@@ -114,4 +126,19 @@ class UserCreate(CreateView):
     form_class = UserForm
     template_name = 'hr.html'
     success_url = '/'
+
+
+class TaskRelation(forms.ModelForm):
+    """
+    Create new task object
+    """
+    predecessors = forms.ModelChoiceField(
+        queryset=Task.objects.all(), widget=forms.Select(
+            attrs={'class': 'form-control'}), label='Предыдущая задача')
+
+    class Meta:
+        model = Task
+        fields = [
+            'predecessors',
+        ]
 
