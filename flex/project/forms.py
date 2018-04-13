@@ -11,21 +11,14 @@ class DurationInput(TextInput):
     Custom input widget for duration field, convert seconds in parsing to days
     """
     def format_value(self, value):
-        if 'день' in value:
-            value = value.replace(' день', '')
-        elif 'дня' in value:
-            value = value.replace(' дня', '')
-        elif 'дней' in value:
-            value = value.replace(' дней', '')
-        duration = parse_duration(value)
-        duration_days = duration.seconds
-        days = datetime.timedelta(days=duration_days)
-        if int(value[-1]) == 1:
-            return '{} день'.format(days.days)
-        elif 1 < int(value[-1]) <= 4:
-            return '{} дня'.format(days.days)
-        else:
-            return '{} дней'.format(days.days)
+        if 'д' in value:
+            day_number = int(value.replace('д', ''))
+            days = datetime.timedelta(days=day_number)
+        elif 'д' not in value:
+            duration = parse_duration(value)
+            second_number = duration.seconds
+            days = datetime.timedelta(days=second_number)
+        return '{}д'.format(days.days)
 
 
 class TaskForm(forms.ModelForm):
