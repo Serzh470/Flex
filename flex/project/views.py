@@ -98,7 +98,6 @@ class ProjectDashboard(TemplateView):
             'project': Project.objects.filter(pk=pk),
             'tasksrel': TaskRel.objects.all(),
         })
-        print(context)
         return context
 
 

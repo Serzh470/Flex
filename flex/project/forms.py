@@ -4,21 +4,30 @@ from .models import Project, Task, STATUS, User, TASK_TYPE
 from django.forms.widgets import TextInput
 from django.utils.dateparse import parse_duration
 import datetime
+from django.core.exceptions import ValidationError
 
 
 class DurationInput(TextInput):
     """
-    Custom input widget for duration field, convert seconds in parsing to days
+    Custom input widget for duration field, convert seconds in days
     """
     def format_value(self, value):
         if 'д' in value:
             day_number = int(value.replace('д', ''))
             days = datetime.timedelta(days=day_number)
-        elif 'д' not in value:
+        else:
             duration = parse_duration(value)
             second_number = duration.seconds
             days = datetime.timedelta(days=second_number)
         return '{}д'.format(days.days)
+
+
+class DurationDayFiled(forms.DurationField):
+
+    def to_python(self, value):
+        if 'д' in value:
+            value = value.replace('д', '')
+        return super().to_python(value)
 
 
 class TaskForm(forms.ModelForm):
@@ -40,7 +49,7 @@ class TaskForm(forms.ModelForm):
     start_date = forms.DateField(
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
-    duration = forms.DurationField(
+    duration = DurationDayFiled(
         widget=DurationInput(attrs={'class': 'form-control'}), label='Продолжительность')
     end_date = forms.DateField(
         widget=forms.DateInput(
