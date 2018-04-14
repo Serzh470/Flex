@@ -1,11 +1,40 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
 from .models import Project, Task, STATUS, User, TASK_TYPE
+from django.forms.widgets import TextInput
+from django.utils.dateparse import parse_duration
+import datetime
+from django.core.exceptions import ValidationError
+
+
+class DurationInput(TextInput):
+    """
+    Custom input widget for duration field, convert seconds in days
+    """
+    def format_value(self, value):
+        if 'д' in value:
+            day_number = int(value.replace('д', ''))
+            days = datetime.timedelta(days=day_number)
+        else:
+            duration = parse_duration(value)
+            second_number = duration.seconds
+            days = datetime.timedelta(days=second_number)
+        return '{}д'.format(days.days)
+
+
+class DurationDayFiled(forms.DurationField):
+    """
+    Custom input field for input in days
+    """
+    def to_python(self, value):
+        if 'д' in value:
+            value = value.replace('д', '')
+        return super().to_python(value)
 
 
 class TaskForm(forms.ModelForm):
     """
-    Create new task object
+    Create new task object for with many settings for each field
     """
     wbs_code = forms.CharField(
         label='WBS код',
@@ -28,7 +57,8 @@ class TaskForm(forms.ModelForm):
     )
     description = forms.CharField(
         label='Описание',
-        required=False, widget=forms.Textarea(
+        required=False, 
+        widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 3}
         )
     )
@@ -37,18 +67,20 @@ class TaskForm(forms.ModelForm):
         widget=forms.DateInput(
             attrs={'class': 'datepicker form-control'}
         ), required=False
-    )
-    duration = forms.DurationField(
-        label='Продолжительность',
-        widget=forms.TextInput(
-            attrs={'class': 'form-control'}
-        ), required=False
+    )    
+    duration = DurationDayFiled(
+        widget=DurationInput(
+          required=False, 
+          label='Продолжительность',
+          attrs={'class': 'form-control'}
+        )
     )
     end_date = forms.DateField(
         label='Дата завершения',
+        required=False,
         widget=forms.DateInput(
             attrs={'class': 'datepicker form-control'}
-        ), required=False
+        )
     )
     responsible = forms.CharField(
         label='Исполнитель',
@@ -130,7 +162,7 @@ class UserCreate(CreateView):
 
 class TaskRelation(forms.ModelForm):
     """
-    Create new task object
+    Create new
     """
     predecessors = forms.ModelChoiceField(
         queryset=Task.objects.all(), widget=forms.Select(
