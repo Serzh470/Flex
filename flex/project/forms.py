@@ -52,7 +52,7 @@ class TaskForm(forms.ModelForm):
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
     duration = DurationDayFiled(
-        widget=DurationInput(attrs={'class': 'form-control'}), label='Продолжительность')
+        widget=DurationInput(attrs={'class': 'form-control'}), required=False, label='Продолжительность')
     end_date = forms.DateField(
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'type': 'date'}, format='%d.%m.%Y'), label='Дата завершения')
