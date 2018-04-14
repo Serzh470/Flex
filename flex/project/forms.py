@@ -12,14 +12,15 @@ class DurationInput(TextInput):
     Custom input widget for duration field, convert seconds in days
     """
     def format_value(self, value):
-        if 'д' in value:
-            day_number = int(value.replace('д', ''))
-            days = datetime.timedelta(days=day_number)
-        else:
-            duration = parse_duration(value)
-            second_number = duration.seconds
-            days = datetime.timedelta(days=second_number)
-        return '{}д'.format(days.days)
+        if isinstance(value, str):
+            if 'д' in value:
+                day_number = int(value.replace('д', ''))
+                days = datetime.timedelta(days=day_number)
+            else:
+                duration = parse_duration(value)
+                second_number = duration.seconds
+                days = datetime.timedelta(days=second_number)
+            return '{}д'.format(days.days)
 
 
 class DurationDayFiled(forms.DurationField):
@@ -27,8 +28,9 @@ class DurationDayFiled(forms.DurationField):
     Custom input field for input in days
     """
     def to_python(self, value):
-        if 'д' in value:
-            value = value.replace('д', '')
+        if isinstance(value, str):
+            if 'д' in value:
+                value = value.replace('д', '')
         return super().to_python(value)
 
 
@@ -64,15 +66,16 @@ class TaskForm(forms.ModelForm):
     )
     start_date = forms.DateField(
         label='Дата начала',
+        required=False,
         widget=forms.DateInput(
             attrs={'class': 'datepicker form-control'}
-        ), required=False
+        )
     )    
     duration = DurationDayFiled(
+        required=False,
+        label='Продолжительность',
         widget=DurationInput(
-          required=False, 
-          label='Продолжительность',
-          attrs={'class': 'form-control'}
+            attrs={'class': 'form-control'}
         )
     )
     end_date = forms.DateField(
