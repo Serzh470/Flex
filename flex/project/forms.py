@@ -23,7 +23,9 @@ class DurationInput(TextInput):
 
 
 class DurationDayFiled(forms.DurationField):
-
+    """
+    Custom input field for input in days
+    """
     def to_python(self, value):
         if 'д' in value:
             value = value.replace('д', '')
