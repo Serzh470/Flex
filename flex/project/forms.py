@@ -37,34 +37,70 @@ class TaskForm(forms.ModelForm):
     Create new task object for with many settings for each field
     """
     wbs_code = forms.CharField(
+        label='WBS код',
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}), label='WBS код')
+            attrs={'class': 'form-control'}
+        )
+    )
     task_type = forms.ChoiceField(
+        choices=TASK_TYPE,
+        label='Тип',
         widget=forms.Select(
-            attrs={'class': 'form-control'}), choices=TASK_TYPE, label='Тип')
+            attrs={'class': 'form-control'}
+        )
+    )
     name = forms.CharField(
+        label='Название',
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}), label='Название')
+            attrs={'class': 'form-control'}
+        )
+    )
     description = forms.CharField(
-        required=False, widget=forms.Textarea(
-            attrs={'class': 'form-control', 'rows': 3}), label='Описание')
+        label='Описание',
+        required=False, 
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3}
+        )
+    )
     start_date = forms.DateField(
+        label='Дата начала',
         widget=forms.DateInput(
-            attrs={'class': 'form-control', 'placeholder': 'Старт', 'type': 'date'}, format='%d.%m.%Y'), label='Дата начала')
+            attrs={'class': 'datepicker form-control'}
+        ), required=False
+    )    
     duration = DurationDayFiled(
-        widget=DurationInput(attrs={'class': 'form-control'}), required=False, label='Продолжительность')
+        widget=DurationInput(
+          required=False, 
+          label='Продолжительность',
+          attrs={'class': 'form-control'}
+        )
+    )
     end_date = forms.DateField(
+        label='Дата завершения',
+        required=False,
         widget=forms.DateInput(
-            attrs={'class': 'form-control', 'type': 'date'}, format='%d.%m.%Y'), label='Дата завершения')
+            attrs={'class': 'datepicker form-control'}
+        )
+    )
     responsible = forms.CharField(
+        label='Исполнитель',
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}), label='Исполнитель')
+            attrs={'class': 'form-control'}
+        )
+    )
     status = forms.ChoiceField(
+        choices=STATUS,
+        label='Статус',
         widget=forms.Select(
-            attrs={'class': 'form-control'}), choices=STATUS, label='Статус')
+            attrs={'class': 'form-control'}
+        )
+    )
     project = forms.ModelChoiceField(
+        label='Проект',
         queryset=Project.objects.all(), required=False, widget=forms.Select(
-            attrs={'class': 'form-control'}), label='Проект')
+            attrs={'class': 'form-control'}
+        )
+    )
 
     class Meta:
         model = Task
