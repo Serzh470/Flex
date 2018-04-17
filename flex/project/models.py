@@ -43,21 +43,19 @@ def tasks_update(task_id, **kwargs):
     """
     Function for updating dates in tasks, if one task is changed.
     """
-    if not len(TaskRel.objects.filter(predecessors__id=task_id)):
-        return None
-    else:
-        for next_task in TaskRel.objects.filter(predecessors__id=task_id):
-            task_to_upd = Task.objects.get(id=next_task.successor_id)
-            if len(TaskRel.objects.filter(successor__id=task_to_upd.id)) == 1:
+    if TaskRel.objects.filter(predecessors__id=task_id).exists():
+        for next_task in TaskRel.objects.filter(predecessors__id=task_id).select_related('successor'):
+            task_to_upd = next_task.successor
+            if TaskRel.objects.filter(successor__id=task_to_upd.id).count() == 1:
                 new_end = Task.objects.get(id=task_id).end_date
                 task_to_upd.start_date = new_end
                 task_to_upd.end_date = task_to_upd.start_date + task_to_upd.duration
                 task_to_upd.save()
                 tasks_update(task_to_upd.id)  # call function again for the next tasks
             # if task_to_upd has more, than one predecessor, define the latest finish date
-            elif len(TaskRel.objects.filter(successor__id=task_to_upd.id)) > 1:
+            else:
                 end_dates = dict()
-                previous_tasks = TaskRel.objects.filter(successor__id=task_to_upd.id)
+                previous_tasks = TaskRel.objects.filter(successor__id=task_to_upd.id).select_related('predecessors')
                 for each_task in previous_tasks:
                     end_dates[each_task.predecessors_id] = Task.objects.get(id=each_task.predecessors_id).end_date
                 max_end_date = max(end_dates)
@@ -89,15 +87,19 @@ class Task(models.Model):
         """
         Redefine save method for model of Task, update dates in others successors
         """
-        new_start = self.start_date
-        new_duration = self.duration
-        task_id = self.id
-        self.end_date = new_start + new_duration
-        old_start = Task.objects.get(id=task_id).start_date
-        old_duration = Task.objects.get(id=task_id).duration
-        super(Task, self).save()
-        if new_start != old_start or new_duration != old_duration:
-            tasks_update(task_id)
+        if not self.id:
+            super(Task, self).save()
+            tasks_update(self.id)
+        else:
+            new_start = self.start_date
+            new_duration = self.duration
+            task_id = self.id
+            self.end_date = new_start + new_duration
+            old_start = Task.objects.get(id=task_id).start_date
+            old_duration = Task.objects.get(id=task_id).duration
+            super(Task, self).save()
+            if new_start != old_start or new_duration != old_duration:
+                tasks_update(task_id)
 
 
 class User(models.Model):

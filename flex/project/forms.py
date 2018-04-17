@@ -12,7 +12,10 @@ class DurationInput(TextInput):
     Custom widget for duration field, show duration in days '%dд' format in form
     """
     def format_value(self, value):
-        return '{}д'.format(value.days)
+        if isinstance(value, datetime.timedelta):
+            return '{}д'.format(value.days)
+        else:
+            return 'д'
 
 
 class DurationDayFiled(forms.CharField):
