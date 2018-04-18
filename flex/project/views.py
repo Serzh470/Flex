@@ -1,7 +1,8 @@
 from .models import Project, Task, User, TaskRel
-from .forms import UserForm, TaskRelation
+from .forms import UserForm, TaskRelation, TaskForm
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
@@ -52,6 +53,34 @@ class MyProjectList(ListView):
         return Project.objects.all()
 
 
+class TaskCreate(CreateView):
+    """
+    Display form for creating new task
+    """
+    form_class = TaskForm
+    template_name = 'create_task.html'
+    success_url = '/mytasks/'
+
+
+class TaskUpdate(UpdateView):
+    """
+    Display form for update task
+    """
+    form_class = TaskForm
+    template_name = 'create_task.html'
+    success_url = '/mytasks/'
+    queryset = Task.objects.all()
+
+
+class TaskDelete(DeleteView):
+    """
+    Display form for removing task
+    """
+    model = Task
+    template_name = 'delete_task.html'
+    success_url = '/mytasks/'
+
+
 class HR(ListView):
     template_name = 'hr.html'
     model = User
@@ -89,7 +118,6 @@ class ProjectDashboard(TemplateView):
     Display project dashboard
     """
     template_name = 'project_dashboard.html'
-    # model = Project
 
     def get_context_data(self, pk, **kwargs):
         context = super(ProjectDashboard, self).get_context_data(**kwargs)
@@ -102,6 +130,9 @@ class ProjectDashboard(TemplateView):
 
 
 def new_relation(request, pk):
+    """
+    Display form for creation of new relation between tasks with validation
+    """
     form = TaskRelation()
     error_message = ''
     if request.method == 'POST':
@@ -117,6 +148,9 @@ def new_relation(request, pk):
 
 
 def upd_relation(request, pk):
+    """
+    Display form for editing relation between tasks with validation
+    """
     form = TaskRelation()
     rel = TaskRel.objects.get(pk=pk)
     error_message = ''
@@ -135,6 +169,9 @@ def upd_relation(request, pk):
 
 
 def del_relation(request, pk):
+    """
+    Display form for removing task
+    """
     form = None
     rel = TaskRel.objects.get(pk=pk)
     if request.method == 'POST':

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard, new_relation, upd_relation, del_relation
-from .forms import TaskCreate, TaskUpdate, TaskDelete
+from .views import TaskCreate, TaskUpdate, TaskDelete
 
 
 urlpatterns = [

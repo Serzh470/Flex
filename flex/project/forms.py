@@ -9,28 +9,27 @@ from django.core.exceptions import ValidationError
 
 class DurationInput(TextInput):
     """
-    Custom input widget for duration field, convert seconds in days
+    Custom widget for duration field, show duration in days '%dд' format in form
     """
     def format_value(self, value):
-        if isinstance(value, str):
-            if 'д' in value:
-                day_number = int(value.replace('д', ''))
-                days = datetime.timedelta(days=day_number)
-            else:
-                duration = parse_duration(value)
-                second_number = duration.seconds
-                days = datetime.timedelta(days=second_number)
-            return '{}д'.format(days.days)
+        if isinstance(value, datetime.timedelta):
+            return '{}д'.format(value.days)
+        else:
+            return 'д'
 
 
-class DurationDayFiled(forms.DurationField):
+class DurationDayFiled(forms.CharField):
     """
-    Custom input field for input in days
+    Custom input field for input in days. Saves number in form in days in timedelta (with or without 'д').
     """
     def to_python(self, value):
-        if isinstance(value, str):
-            if 'д' in value:
-                value = value.replace('д', '')
+
+        if 'д' in value:
+            value = int(value.replace('д', ''))
+            value = datetime.timedelta(days=value)
+        else:
+            days_number = int(value)
+            value = datetime.timedelta(days=days_number)
         return super().to_python(value)
 
 
@@ -121,25 +120,6 @@ class TaskForm(forms.ModelForm):
         ]
 
 
-class TaskCreate(CreateView):
-    form_class = TaskForm
-    template_name = 'create_task.html'
-    success_url = '/mytasks/'
-
-
-class TaskUpdate(UpdateView):
-    form_class = TaskForm
-    template_name = 'create_task.html'
-    success_url = '/mytasks/'
-    queryset = Task.objects.all()
-
-
-class TaskDelete(DeleteView):
-    model = Task
-    template_name = 'delete_task.html'
-    success_url = '/mytasks/'
-
-
 class UserForm(forms.ModelForm):
 
     class Meta:
@@ -165,7 +145,7 @@ class UserCreate(CreateView):
 
 class TaskRelation(forms.ModelForm):
     """
-    Create new
+    Display form for defining relation between tasks
     """
     predecessors = forms.ModelChoiceField(
         queryset=Task.objects.all(), widget=forms.Select(
