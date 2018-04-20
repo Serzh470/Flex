@@ -7,7 +7,7 @@ from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.views.generic.detail import DetailView
+import json
 
 
 # Create your views here.
@@ -112,7 +112,45 @@ def hr_all(request):
 #     def get_queryset(self):
 #         return User.objects.all()
 
-      
+
+def json_to_gantt():
+    """
+    Convert tasks data to json output
+    """
+    output = list()
+    i = 0
+    for each_task in Task.objects.all():
+        task_info = list()
+        task_info.append(str(Task.objects.get(id=each_task.id).id))
+        task_info.append(Task.objects.get(id=each_task.id).name)
+        js_start_date = (
+            Task.objects.get(id=each_task.id).start_date.year,
+            Task.objects.get(id=each_task.id).start_date.month,
+            Task.objects.get(id=each_task.id).start_date.day
+        )
+        task_info.append(js_start_date)
+        js_end_date = (
+            Task.objects.get(id=each_task.id).end_date.year,
+            Task.objects.get(id=each_task.id).end_date.month,
+            Task.objects.get(id=each_task.id).end_date.day
+        )
+        task_info.append(js_end_date)
+        task_info.append(Task.objects.get(id=each_task.id).duration.days)
+        task_info.append(Task.objects.get(id=each_task.id).percent_complete)
+        js_predecessors = list()
+        if TaskRel.objects.filter(successor__id=each_task.id).exists():
+            for item in TaskRel.objects.filter(successor__id=each_task.id):
+                js_predecessors.append(str(item.predecessors_id))
+
+            task_info.append(','.join(js_predecessors))
+        else:
+            task_info.append('')
+        output.append(task_info)
+        i += 1
+    response = json.dumps(output)
+    return response
+
+
 class ProjectDashboard(TemplateView):
     """
     Display project dashboard
@@ -125,6 +163,7 @@ class ProjectDashboard(TemplateView):
             'tasks': Task.objects.filter(project_id=pk),
             'project': Project.objects.filter(pk=pk),
             'tasksrel': TaskRel.objects.all(),
+            'output': json_to_gantt(),
         })
         return context
 

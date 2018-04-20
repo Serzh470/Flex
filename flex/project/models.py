@@ -78,6 +78,7 @@ class Task(models.Model):
     end_date = models.DateField(null=True, blank=True)
     responsible = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS)
+    percent_complete = models.BigIntegerField(default=0)
     project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
 
     def __str__(self):
@@ -88,6 +89,8 @@ class Task(models.Model):
         Redefine save method for model of Task, update dates in others successors
         """
         if not self.id:
+            if self.start_date and self.duration:
+                self.end_date = self.start_date + self.duration
             super(Task, self).save()
             tasks_update(self.id)
         else:
