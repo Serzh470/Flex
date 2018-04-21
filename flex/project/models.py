@@ -79,6 +79,9 @@ class Task(models.Model):
     responsible = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS)
     project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
+    optimistic_price = models.IntegerField(null=True, blank=True)
+    pessimistic_price = models.IntegerField(null=True, blank=True)
+    realistic_price = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)
@@ -120,6 +123,7 @@ class User(models.Model):
         return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
 
 
+
 class TaskRel(models.Model):
     """Relationships between models"""
     predecessors = models.ForeignKey(Task, on_delete='PROTECT', null=True, blank=True, unique=False)
@@ -148,3 +152,4 @@ class TaskRel(models.Model):
             tasks_update(task_w_max_end_date)
         else:
             super(TaskRel, self).delete()
+
