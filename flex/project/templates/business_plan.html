@@ -58,6 +58,8 @@
                 {% endfor %}
             </tbody>
     </table>
-    <p>{{ opt_price.optimistic_price__sum }}</p>
+    <h4 class = "h4">Оптимистичная цена: {{ opt_price.optimistic_price__sum }} рубля</h4>
+    <h4 class = 'h4'>Пессимистичная цена: {{pess_price.pessimistic_price__sum}} рубля</h4>
+    <h4 class = "h4">Реалистичная цена: {{real_price.realistic_price__sum}} рубля</h4>
 
 {% endblock %}

@@ -69,7 +69,7 @@ def hr(request):
         else:
             form = BudgetForm()
     # projects = Project.objects.all()
-    return render(request, 'business_plan.html', {'form':form})
+    return render(request, 'hr.html', {'form':form})
     # return render(request, 'hr.html', {'projects':projects})
 
 def hr_all(request):
@@ -113,6 +113,9 @@ class BusinessPlan(TemplateView):
             # 'project': Project.objects.filter(pk=pk)
         })
         context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
+        context['pess_price'] = Task.objects.all().aggregate(Sum('pessimistic_price'))
+        context['real_price'] = Task.objects.all().aggregate(Sum('realistic_price'))
+
         return context
 
 

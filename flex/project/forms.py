@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from .models import Project, Task, STATUS, User, TASK_TYPE
+from .models import Project, Task, STATUS, User, TASK_TYPE, ROLE
 
 
 
@@ -71,7 +71,18 @@ class TaskDelete(DeleteView):
 
 
 class UserForm(forms.ModelForm):
-
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}))
+    surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}))
+    job = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Должность'}))
+    phone = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'E-mail'}))
+    project_role = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Задача или Веха'}),
+                             choices=ROLE)
+    occupation = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Занятость'}))
+    other = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другое'}))
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.all(), required=False, widget=forms.Select(attrs={
+            'class': 'form-control', 'placeholder': 'Входит в проект'}))
 
     class Meta:
         model = User
@@ -91,6 +102,10 @@ class UserCreate(CreateView):
     form_class = UserForm
     template_name = 'hr.html'
     success_url = '/'
+
+
+
+
 
 
 class BudgetForm(forms.ModelForm):
