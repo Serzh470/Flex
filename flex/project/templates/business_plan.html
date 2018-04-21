@@ -35,27 +35,29 @@
                 <th scope="col">WBS Код</th>
                 <th scope="col">Тип</th>
                 <th scope="col">Задача</th>
-                <th scope="col">Старт</th>
-                <th scope="col">Финиш</th>
                 <th scope="col">Исполнитель</th>
                 <th scope="col">Статус</th>
-                <th scope="col">Проект</th>
+                <th scope="col">Оптимистичный план</th>
+                <th scope="col">Пессиммистичный план</th>
+                <th scope="col">Реалистичный план</th>
             </tr>
         </thead>
-        <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <th scope="row">{{ task.wbs_code }}</th>
-                    <td>{{ task.get_task_type_display }}</td>
-                    <td>{{ task.name }}</td>
-                    <td>{{ task.start_date }}</td>
-                    <td>{{ task.end_date }}</td>
-                    <td>{{ task.responsible }}</td>
-                    <td>{{ task.get_status_display }}</td>
-                    <td>{{ task.project }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+
+             <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <th scope="row">{{ task.wbs_code }}</th>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.responsible }}</td>
+                        <td>{{ task.get_status_display }}</td>
+                        <td>{{ task.project }}</td>
+                        <td>{{ task.optimistic_price }}</td>
+                        <td>{{ task.pessimistic_price }}</td>
+                        <td>{{ task.realistic_price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
     </table>
+    <p>{{ opt_price.optimistic_price__sum }}</p>
 
 {% endblock %}

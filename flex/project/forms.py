@@ -43,6 +43,9 @@ class TaskForm(forms.ModelForm):
             'responsible',
             'status',
             'project',
+            'optimistic_price',
+            'pessimistic_price',
+            'realistic_price'
         ]
 
 
@@ -89,3 +92,22 @@ class UserCreate(CreateView):
     template_name = 'hr.html'
     success_url = '/'
 
+
+class BudgetForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields =[
+            'wbs_code',
+            'name',
+            'description',
+            'responsible',
+            'status',
+            'optimistic_price',
+            'pessimistic_price',
+            'realistic_price',
+        ]
+
+class BudgetCalculate(CreateView):
+    form_class = BudgetForm
+    template_name = 'business_plan.html'
+    success_url = ''

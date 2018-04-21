@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard
+from .views import Home, MyProjectList, MyTaskList, hr, hr_all, ProjectDashboard, BusinessPlan
 
 from .forms import TaskCreate, TaskUpdate, TaskDelete
 
@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^updtask/(?P<pk>\d+)/$', TaskUpdate.as_view(), name='upd_task'),
     url(r'^deltask/(?P<pk>\d+)/$', TaskDelete.as_view(), name='del_task'),
     url(r'^project_dashboard/(?P<pk>\d+)/$', ProjectDashboard.as_view(), name='project_dashboard'),
+    url(r'^project_dashboard/(?P<pk>\d+)/budget/$', BusinessPlan.as_view(), name='business_plan'),
+
 ]

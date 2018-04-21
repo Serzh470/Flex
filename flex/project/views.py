@@ -1,10 +1,11 @@
 from .models import Project, Task, User
-from .forms import UserForm
+from .forms import UserForm, BudgetForm
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
+from django.db.models import Sum
 
 from django.views.generic.detail import DetailView
 
@@ -60,20 +61,23 @@ class HR(ListView):
 def hr(request):
     form=UserForm()
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = BudgetForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
             return redirect('hr_all')
         else:
-            form = UserForm()
+            form = BudgetForm()
     # projects = Project.objects.all()
-    return render(request, 'hr.html', {'form':form})
+    return render(request, 'business_plan.html', {'form':form})
     # return render(request, 'hr.html', {'projects':projects})
 
 def hr_all(request):
-    users = User.objects.all()
+    users = Task.objects.all()
     return render(request, 'hr_all.html', {'users': users})
+
+
+
 
 # class HrList(ListView):
 #     template_name ='hr_all.html'
@@ -97,6 +101,20 @@ class ProjectDashboard(TemplateView):
             'project': Project.objects.filter(pk=pk)
         })
         return context
+
+
+class BusinessPlan(TemplateView):
+    template_name = 'business_plan.html'
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(BusinessPlan, self).get_context_data(**kwargs)
+        context.update({
+            'tasks': Task.objects.filter(project_id=pk),
+            # 'project': Project.objects.filter(pk=pk)
+        })
+        context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
+        return context
+
 
 
 

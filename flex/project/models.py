@@ -42,8 +42,8 @@ class Task(models.Model):
     wbs_code = models.CharField(max_length=32, unique=True)
     task_type = models.SmallIntegerField(choices=TASK_TYPE, default=1)
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    start_date = models.DateField()
+    description = models.TextField(null=True)
+    start_date = models.DateField(null=True)
     duration = models.DurationField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     predecessor = models.IntegerField(null=True, blank=True)
@@ -51,6 +51,9 @@ class Task(models.Model):
     responsible = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS)
     project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
+    optimistic_price = models.IntegerField(null=True, blank=True)
+    pessimistic_price = models.IntegerField(null=True, blank=True)
+    realistic_price = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)
@@ -69,4 +72,6 @@ class User(models.Model):
 
     def __str__(self):
         return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
+
+
 
