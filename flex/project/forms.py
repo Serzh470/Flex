@@ -112,6 +112,27 @@ class TaskForm(forms.ModelForm):
             attrs={'class': 'form-control'}
         )
     )
+    optimistic_price = forms.FloatField(
+        label='Оптимистичная стоимость',
+        required=False,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control', 'type': 'number'}
+        )
+    )
+    realistic_price = forms.FloatField(
+        label='Реалистичная стоимость',
+        required=False,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control', 'type': 'number'}
+        )
+    )
+    pessimistic_price = forms.FloatField(
+        label='Пессимистичная стоимость',
+        required=False,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control', 'type': 'number'}
+        )
+    )
 
     class Meta:
         model = Task
@@ -128,25 +149,61 @@ class TaskForm(forms.ModelForm):
             'percent_complete',
             'project',
             'optimistic_price',
-            'pessimistic_price',
-            'realistic_price'
+            'realistic_price',
+            'pessimistic_price'
         ]
 
 
 class UserForm(forms.ModelForm):
 
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}))
-    surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}))
-    job = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Должность'}))
-    phone = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'E-mail'}))
-    project_role = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Задача или Веха'}),
-                             choices=ROLE)
-    occupation = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Занятость'}))
-    other = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другое'}))
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Имя'}
+        )
+    )
+    surname = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Фамилия'}
+        )
+    )
+    job = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Должность'}
+        )
+    )
+    phone = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Телефон'}
+        )
+    )
+    email = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'E-mail'}
+        )
+    )
+    project_role = forms.ChoiceField(
+        choices=ROLE,
+        widget=forms.Select(
+            attrs={'class': 'form-control', 'placeholder': 'Роль в проекте'}
+        )
+    )
+    occupation = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Занятость'}
+        )
+    )
+    other = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Другое'}
+        )
+    )
     project = forms.ModelChoiceField(
-        queryset=Project.objects.all(), required=False, widget=forms.Select(attrs={
-            'class': 'form-control', 'placeholder': 'Входит в проект'}))
+        queryset=Project.objects.all(),
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control', 'placeholder': 'Входит в проект'}
+        )
+    )
 
     class Meta:
         model = User
