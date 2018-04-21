@@ -21,3 +21,4 @@ urlpatterns = [
     url(r'^upd_rel_task/(?P<pk>\d+)/$', upd_relation, name='upd_rel_task'),
     url(r'^del_rel_task/(?P<pk>\d+)/$', del_relation, name='del_rel_task')
 ]
+
