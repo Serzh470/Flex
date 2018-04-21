@@ -7,7 +7,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('project', '0020_auto_20180413_2257'),
-        ('project', '0002_remove_task_predecessor'),
     ]
 
     operations = [
