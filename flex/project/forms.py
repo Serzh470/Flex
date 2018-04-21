@@ -190,7 +190,8 @@ class BudgetCalculate(CreateView):
     form_class = BudgetForm
     template_name = 'business_plan.html'
     success_url = ''
-=======
+
+
 class TaskRelation(forms.ModelForm):
     """
     Display form for defining relation between tasks

@@ -93,20 +93,20 @@ class HR(ListView):
 def hr(request):
     form = UserForm()
     if request.method == "POST":
-        form = BudgetForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
             return redirect('hr_all')
         else:
-            form = BudgetForm()
+            form = UserForm()
     # projects = Project.objects.all()
     return render(request, 'hr.html', {'form':form})
     # return render(request, 'hr.html', {'projects':projects})
 
 
 def hr_all(request):
-    users = Task.objects.all()
+    users = User.objects.all()
     return render(request, 'hr_all.html', {'users': users})
 
 
