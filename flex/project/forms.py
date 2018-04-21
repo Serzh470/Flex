@@ -5,7 +5,6 @@ from django.forms.widgets import TextInput
 import datetime
 
 
-
 class DurationInput(TextInput):
     """
     Custom widget for duration field, show duration in days '%dд' format in form
@@ -170,8 +169,6 @@ class UserCreate(CreateView):
     success_url = '/'
 
 
-
-
 class BudgetForm(forms.ModelForm):
     class Meta:
         model = Task
@@ -186,11 +183,13 @@ class BudgetForm(forms.ModelForm):
             'realistic_price',
         ]
 
+
 class BudgetCalculate(CreateView):
     form_class = BudgetForm
     template_name = 'business_plan.html'
     success_url = ''
-=======
+
+
 class TaskRelation(forms.ModelForm):
     """
     Display form for defining relation between tasks

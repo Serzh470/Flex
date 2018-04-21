@@ -1,7 +1,5 @@
-
 from .models import Project, Task, User, TaskRel
 from .forms import UserForm, TaskRelation, TaskForm, BudgetForm
-
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -12,9 +10,6 @@ from django.db.models import Sum
 from django.contrib import messages
 import json
 
-
-
-# Create your views here.
 
 class Home(TemplateView):
     """
@@ -106,18 +101,8 @@ def hr(request):
 
 
 def hr_all(request):
-    users = Task.objects.all()
+    users = User.objects.all()
     return render(request, 'hr_all.html', {'users': users})
-
-
-
-
-# class HrList(ListView):
-#     template_name ='hr_all.html'
-#     model=User
-#
-#     def get_queryset(self):
-#         return User.objects.all()
 
 
 def json_to_gantt():
@@ -175,7 +160,6 @@ class ProjectDashboard(TemplateView):
         return context
 
 
-
 class BusinessPlan(TemplateView):
     template_name = 'business_plan.html'
 
@@ -188,9 +172,7 @@ class BusinessPlan(TemplateView):
         context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
         context['pess_price'] = Task.objects.all().aggregate(Sum('pessimistic_price'))
         context['real_price'] = Task.objects.all().aggregate(Sum('realistic_price'))
-
         return context
-
 
 
 def new_relation(request, pk):
