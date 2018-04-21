@@ -1,13 +1,17 @@
+
 from .models import Project, Task, User, TaskRel
-from .forms import UserForm, TaskRelation, TaskForm
+from .forms import UserForm, TaskRelation, TaskForm, BudgetForm
+
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from requests import request
 from django.shortcuts import redirect
+from django.db.models import Sum
 from django.contrib import messages
 import json
+
 
 
 # Create your views here.
@@ -89,21 +93,24 @@ class HR(ListView):
 def hr(request):
     form = UserForm()
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = BudgetForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
             return redirect('hr_all')
         else:
-            form = UserForm()
+            form = BudgetForm()
     # projects = Project.objects.all()
     return render(request, 'hr.html', {'form':form})
     # return render(request, 'hr.html', {'projects':projects})
 
 
 def hr_all(request):
-    users = User.objects.all()
+    users = Task.objects.all()
     return render(request, 'hr_all.html', {'users': users})
+
+
+
 
 # class HrList(ListView):
 #     template_name ='hr_all.html'
@@ -166,6 +173,24 @@ class ProjectDashboard(TemplateView):
             'output': json_to_gantt(),
         })
         return context
+
+
+
+class BusinessPlan(TemplateView):
+    template_name = 'business_plan.html'
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(BusinessPlan, self).get_context_data(**kwargs)
+        context.update({
+            'tasks': Task.objects.filter(project_id=pk),
+            # 'project': Project.objects.filter(pk=pk)
+        })
+        context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
+        context['pess_price'] = Task.objects.all().aggregate(Sum('pessimistic_price'))
+        context['real_price'] = Task.objects.all().aggregate(Sum('realistic_price'))
+
+        return context
+
 
 
 def new_relation(request, pk):
