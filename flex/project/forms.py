@@ -2,9 +2,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
 from .models import Project, Task, STATUS, User, TASK_TYPE, ROLE
 from django.forms.widgets import TextInput
-from django.utils.dateparse import parse_duration
 import datetime
-from django.core.exceptions import ValidationError
 
 
 
@@ -98,9 +96,20 @@ class TaskForm(forms.ModelForm):
             attrs={'class': 'form-control'}
         )
     )
+    percent_complete = forms.IntegerField(
+        label='% выполнения',
+        required=False,
+        min_value=0,
+        max_value=100,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control', 'type': 'number'}
+        )
+    )
     project = forms.ModelChoiceField(
         label='Проект',
-        queryset=Project.objects.all(), required=False, widget=forms.Select(
+        queryset=Project.objects.all(),
+        required=False,
+        widget=forms.Select(
             attrs={'class': 'form-control'}
         )
     )
@@ -117,6 +126,7 @@ class TaskForm(forms.ModelForm):
             'end_date',
             'responsible',
             'status',
+            'percent_complete',
             'project',
             'optimistic_price',
             'pessimistic_price',
