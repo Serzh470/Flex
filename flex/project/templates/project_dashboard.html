@@ -40,6 +40,7 @@
                 <th scope="col">Финиш</th>
                 <th scope="col">Исполнитель</th>
                 <th scope="col">Статус</th>
+                <th scope="col">Предыдущая задача</th>
                 <th scope="col">Проект</th>
             </tr>
         </thead>
@@ -53,6 +54,13 @@
                     <td>{{ task.end_date }}</td>
                     <td>{{ task.responsible }}</td>
                     <td>{{ task.get_status_display }}</td>
+                    <td>
+                        {% for rel in tasksrel %}
+                            {% if rel.successor.id == task.id %}
+                                {{ rel.predecessors.name }}<br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>{{ task.project }}</td>
                 </tr>
             {% endfor %}

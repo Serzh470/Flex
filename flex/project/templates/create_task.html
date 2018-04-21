@@ -1,15 +1,31 @@
 {% extends 'index.html' %}
 
 {% block create_task %}
-    <div calss="container">
+
+    <div class="container">
         <div class="col-5">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+
+            {% if task.id > 0 %}
+                <h1 class="h2">Изменить задачу</h1>
+            {% else %}
                 <h1 class="h2">Создать задачу</h1>
+            {% endif %}
             </div>
+            {% if messages %}
+                <ul class="message-list">
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        </div>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <form action="" method="post">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form-group">
+                        {{ field.label }}
                         {{ field }}
                     </div>
                 {% endfor %}
@@ -26,7 +42,9 @@
                         <button type="button" class="btn btn-secondary">Отмена</button>
                     </a>
                 {% endif %}
+
             </form>
         </div>
     </div>
+
 {% endblock %}
