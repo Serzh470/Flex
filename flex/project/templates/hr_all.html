@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">Участники</h1>
-        <a href="/hr/">
+        <a href="/adduser/">
             <button type="button" class="btn btn-primary">Добавить участника</button>
         </a>
         </div>
@@ -27,15 +27,54 @@
         <tbody>
             {% for user in users %}
                 <tr>
-                    <td>{{user.name}}</td>
-                    <td>{{ user.surname }}</td>
-                    <td>{{user.job}}</td>
-                    <td>{{user.phone }}</td>
-                    <td>{{user.email }}</td>
-                    <td>{{user.project_role }}</td>
-                    <td>{{ user.occupation }}</td>
-                    <td>{{ user.project }}</td>
-                    <td>{{ user.other }}</td>
+
+
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.first_name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.last_name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.job }}
+                        </a>
+                        </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.phone }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.email }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.get_project_role_display }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.occupation }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.project }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/upduser/{{ user.pk }}/" class="card-link">
+                            {{ user.other }}
+                        </a>
+                    </td>
+
                 </tr>
             {% endfor %}
         </tbody>

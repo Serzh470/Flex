@@ -1,5 +1,5 @@
 from .models import Project, Task, User, TaskRel
-from .forms import UserForm, TaskRelation, TaskForm, BudgetForm
+from .forms import UserForm, TaskRelation, TaskForm
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -80,24 +80,22 @@ class TaskDelete(DeleteView):
     success_url = '/mytasks/'
 
 
-class HR(ListView):
-    template_name = 'hr.html'
-    model = User
+# class HR(ListView):
+#     template_name ='create_user.html'
+#     model = User
 
 
-def hr(request):
-    form = UserForm()
-    if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            return redirect('hr_all')
-        else:
-            form = UserForm()
-    # projects = Project.objects.all()
-    return render(request, 'hr.html', {'form':form})
-    # return render(request, 'hr.html', {'projects':projects})
+# def hr(request):
+#     form = UserForm()
+#     if request.method == "POST":
+#         form = UserForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.save()
+#             return redirect('hr_all')
+#         else:
+#             form = UserForm()
+#     return render(request, 'create_user.html', {'form': form})
 
 
 def hr_all(request):
@@ -167,7 +165,6 @@ class BusinessPlan(TemplateView):
         context = super(BusinessPlan, self).get_context_data(**kwargs)
         context.update({
             'tasks': Task.objects.filter(project_id=pk),
-            # 'project': Project.objects.filter(pk=pk)
         })
         context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
         context['pess_price'] = Task.objects.all().aggregate(Sum('pessimistic_price'))
@@ -225,3 +222,31 @@ def del_relation(request, pk):
         return redirect('/mytasks')
     else:
         return render(request, 'delete_rel.html', {'form': form, 'rel': rel})
+
+
+class UserCreate(CreateView):
+    """
+    Create new user
+    """
+    form_class = UserForm
+    template_name ='create_user.html'
+    success_url = '/hr_all/'
+
+
+class UserUpdate(UpdateView):
+    """
+    Edit users info
+    """
+    form_class = UserForm
+    template_name ='create_user.html'
+    success_url = '/hr_all/'
+    queryset = User.objects.all()
+
+
+class UserDelete(DeleteView):
+    """
+    Display form for removing user
+    """
+    model = User
+    template_name = 'delete_user.html'
+    success_url = '/hr_all/'

@@ -18,7 +18,23 @@ TASK_TYPE = (
     (2, 'Веха'))
 
 
-# Models
+class User(models.Model):
+    """
+    User model
+    """
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    job = models.CharField(max_length=250)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
+    project_role = models.SmallIntegerField(choices=ROLE, null=True, blank=True)
+    occupation = models.CharField(max_length=250, null=True, blank=True)
+    other = models.CharField(max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+
 class Project(models.Model):
     """
     Project model
@@ -28,7 +44,7 @@ class Project(models.Model):
     start_date = models.DateField()
     duration = models.DurationField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    project_manager = models.CharField(max_length=255)
+    project_manager = models.ForeignKey(User, on_delete='PROTECT', null=True, blank=True)
     status = models.SmallIntegerField(choices=STATUS)
 
     def __str__(self):
@@ -76,10 +92,10 @@ class Task(models.Model):
     start_date = models.DateField(null=True, blank=True)
     duration = models.DurationField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    responsible = models.CharField(max_length=255)
+    responsible = models.ForeignKey(User, on_delete='SET_NULL', null=True, blank=True)
     status = models.SmallIntegerField(choices=STATUS)
     percent_complete = models.BigIntegerField(default=0)
-    project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete='SET_NULL', null=True, blank=True)
     optimistic_price = models.IntegerField(null=True, blank=True)
     pessimistic_price = models.IntegerField(null=True, blank=True)
     realistic_price = models.IntegerField(null=True, blank=True)
@@ -106,25 +122,6 @@ class Task(models.Model):
             super(Task, self).save()
             if new_start != old_start or new_duration != old_duration:
                 tasks_update(task_id)
-
-
-class User(models.Model):
-    """
-    User model
-    """
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    job = models.CharField(max_length=250)
-    phone = models.CharField(max_length=50)
-    email = models.CharField(max_length=100)
-    project_role = models.SmallIntegerField(choices=ROLE)
-    occupation = models.CharField(max_length=250)
-    other = models.CharField(max_length=250)
-    project = models.ForeignKey(Project, on_delete='PROTECT', null=True, blank=True)
-
-    def __str__(self):
-        return 'User: {}{} | Project Role: {} | Occupation: {}'.format(self.name, self.surname, self.project_role, self.occupation)
-
 
 
 class TaskRel(models.Model):
