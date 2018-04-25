@@ -82,9 +82,11 @@ class TaskForm(forms.ModelForm):
             attrs={'class': 'datepicker form-control'}
         )
     )
-    responsible = forms.CharField(
+    responsible = forms.ModelChoiceField(
         label='Исполнитель',
-        widget=forms.TextInput(
+        queryset=User.objects.all(),
+        required=False,
+        widget=forms.Select(
             attrs={'class': 'form-control'}
         )
     )
@@ -155,75 +157,71 @@ class TaskForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
-
-    name = forms.CharField(
+    """
+    Form for creating and editing users info.
+    """
+    first_name = forms.CharField(
+        label='Имя',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Имя'}
+            attrs={'class': 'form-control'}
         )
     )
-    surname = forms.CharField(
+    last_name = forms.CharField(
+        label='Фамилия',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Фамилия'}
+            attrs={'class': 'form-control'}
         )
     )
     job = forms.CharField(
+        label='Должность',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Должность'}
+            attrs={'class': 'form-control'}
         )
     )
     phone = forms.CharField(
+        label='Телефон',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Телефон'}
+            attrs={'class': 'form-control'}
         )
     )
     email = forms.CharField(
+        label='E-mail',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'E-mail'}
+            attrs={'class': 'form-control'}
         )
     )
     project_role = forms.ChoiceField(
+        label='Роль в проекте',
         choices=ROLE,
         widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Роль в проекте'}
+            attrs={'class': 'form-control'}
         )
     )
     occupation = forms.CharField(
+        label='% занятости',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Занятость'}
+            attrs={'class': 'form-control'}
         )
     )
     other = forms.CharField(
+        label='Комментарии',
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'Другое'}
-        )
-    )
-    project = forms.ModelChoiceField(
-        queryset=Project.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Входит в проект'}
+            attrs={'class': 'form-control'}
         )
     )
 
     class Meta:
         model = User
         fields = [
-            'name',
-            'surname',
+            'first_name',
+            'last_name',
             'job',
             'phone',
             'email',
             'project_role',
             'occupation',
-            'other',
-            'project'
+            'other'
         ]
-
-
-class UserCreate(CreateView):
-    form_class = UserForm
-    template_name = 'hr.html'
-    success_url = '/'
 
 
 class BudgetForm(forms.ModelForm):

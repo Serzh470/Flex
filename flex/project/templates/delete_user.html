@@ -1,8 +1,8 @@
 {% extends 'index.html' %}
 
-{% block delete_task %}
+{% block delete_user %}
     <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">Удалить задачу {{ task.name }}?</h4>
+        <h4 class="alert-heading">Удалить пользователя {{ user.first_name }} {{ user.last_name }}?</h4>
         <p>Проверьте необходимость удаления данных.</p>
         <hr>
         <p>Это действие нельзя отменить или восстановить удаленные данные.</p>
@@ -10,7 +10,7 @@
         <form action="" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Удалить</button>
-            <a href="/mytasks/">
+            <a href="/hr_all/">
                 <button type="button" class="btn btn-primary">Отмена</button>
             </a>
         </form>
