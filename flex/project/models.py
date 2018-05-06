@@ -96,9 +96,10 @@ class Task(models.Model):
     status = models.SmallIntegerField(choices=STATUS)
     percent_complete = models.BigIntegerField(default=0)
     project = models.ForeignKey(Project, on_delete='SET_NULL', null=True, blank=True)
-    optimistic_price = models.IntegerField(null=True, blank=True)
-    pessimistic_price = models.IntegerField(null=True, blank=True)
-    realistic_price = models.IntegerField(null=True, blank=True)
+    optimistic_price = models.FloatField(null=True, blank=True)
+    realistic_price = models.FloatField(null=True, blank=True)
+    pessimistic_price = models.FloatField(null=True, blank=True)
+    calculated_price = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return 'Task: {} | Responsible: {} | Status: {}'.format(self.name, self.responsible, self.status)
@@ -110,6 +111,8 @@ class Task(models.Model):
         if not self.id:
             if self.start_date and self.duration:
                 self.end_date = self.start_date + self.duration
+            if self.pessimistic_price and self.realistic_price and self.optimistic_price:
+                self.calculated_price = (self.optimistic_price + 4 * self.realistic_price + self.pessimistic_price) / 6
             super(Task, self).save()
             tasks_update(self.id)
         else:
@@ -119,6 +122,8 @@ class Task(models.Model):
             self.end_date = new_start + new_duration
             old_start = Task.objects.get(id=task_id).start_date
             old_duration = Task.objects.get(id=task_id).duration
+            if self.pessimistic_price and self.realistic_price and self.optimistic_price:
+                self.calculated_price = (self.optimistic_price + 4 * self.realistic_price + self.pessimistic_price) / 6
             super(Task, self).save()
             if new_start != old_start or new_duration != old_duration:
                 tasks_update(task_id)

@@ -38,8 +38,9 @@
                 <th scope="col">Исполнитель</th>
                 <th scope="col">Статус</th>
                 <th scope="col">Оптимистичный план</th>
-                <th scope="col">Пессиммистичный план</th>
                 <th scope="col">Реалистичный план</th>
+                <th scope="col">Пессиммистичный план</th>
+                <th scope="col">PERT-оценка</th>
             </tr>
         </thead>
 
@@ -47,19 +48,28 @@
                 {% for task in tasks %}
                     <tr>
                         <th scope="row">{{ task.wbs_code }}</th>
+                        <td>{{ task.get_task_type_display }}</td>
                         <td>{{ task.name }}</td>
                         <td>{{ task.responsible }}</td>
                         <td>{{ task.get_status_display }}</td>
-                        <td>{{ task.project }}</td>
-                        <td>{{ task.optimistic_price }}</td>
-                        <td>{{ task.pessimistic_price }}</td>
-                        <td>{{ task.realistic_price }}</td>
+                        <td>{{ task.optimistic_price|floatformat:-2 }}</td>
+                        <td>{{ task.realistic_price|floatformat:-2 }}</td>
+                        <td>{{ task.pessimistic_price|floatformat:-2 }}</td>
+                        <td>{{ task.calculated_price|floatformat:-2 }}</td>
                     </tr>
                 {% endfor %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td><b>Итого:</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ opt_price.optimistic_price__sum|floatformat:-2 }}</td>
+                        <td>{{ real_price.realistic_price__sum|floatformat:-2 }}</td>
+                        <td>{{ pess_price.pessimistic_price__sum|floatformat:-2 }}</td>
+                        <td>{{ calc_price.calculated_price__sum|floatformat:-2}}</td>
+                    </tr>
             </tbody>
     </table>
-    <h4 class = "h4">Оптимистичная цена: {{ opt_price.optimistic_price__sum }} рубля</h4>
-    <h4 class = 'h4'>Пессимистичная цена: {{pess_price.pessimistic_price__sum}} рубля</h4>
-    <h4 class = "h4">Реалистичная цена: {{real_price.realistic_price__sum}} рубля</h4>
 
 {% endblock %}
