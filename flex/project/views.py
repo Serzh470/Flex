@@ -80,25 +80,10 @@ class TaskDelete(DeleteView):
     success_url = '/mytasks/'
 
 
-# class HR(ListView):
-#     template_name ='create_user.html'
-#     model = User
-
-
-# def hr(request):
-#     form = UserForm()
-#     if request.method == "POST":
-#         form = UserForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.save()
-#             return redirect('hr_all')
-#         else:
-#             form = UserForm()
-#     return render(request, 'create_user.html', {'form': form})
-
-
 def hr_all(request):
+    """
+    Show list of project team
+    """
     users = User.objects.all()
     return render(request, 'hr_all.html', {'users': users})
 
@@ -169,6 +154,7 @@ class BusinessPlan(TemplateView):
         context['opt_price'] = Task.objects.all().aggregate(Sum('optimistic_price'))
         context['pess_price'] = Task.objects.all().aggregate(Sum('pessimistic_price'))
         context['real_price'] = Task.objects.all().aggregate(Sum('realistic_price'))
+        context['calc_price'] = Task.objects.all().aggregate(Sum('calculated_price'))
         return context
 
 
